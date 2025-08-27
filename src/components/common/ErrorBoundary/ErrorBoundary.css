@@ -1,0 +1,83 @@
+.error-boundary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.error-boundary__content {
+  text-align: center;
+  max-width: 500px;
+}
+
+.error-boundary__icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.error-boundary__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #343a40;
+  margin: 0 0 1rem 0;
+}
+
+.error-boundary__message {
+  font-size: 1rem;
+  color: #6c757d;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.5;
+}
+
+.error-boundary__details {
+  margin: 1rem 0;
+  text-align: left;
+}
+
+.error-boundary__details summary {
+  cursor: pointer;
+  color: #495057;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.error-boundary__error-stack {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 1rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.error-boundary__retry-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.error-boundary__retry-button:hover {
+  background-color: #0056b3;
+}
+
+.error-boundary__retry-button:active {
+  background-color: #004085;
+}
+
+.error-boundary__retry-button:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}

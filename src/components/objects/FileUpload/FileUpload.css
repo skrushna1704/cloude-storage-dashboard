@@ -1,0 +1,33 @@
+.file-upload {
+  width: 100%;
+}
+
+.drag-drop-zone {
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #f8f9fa;
+}
+
+.drag-drop-zone:hover {
+  border-color: #007bff;
+  background-color: #e3f2fd;
+}
+
+.drag-drop-zone--drag-over {
+  border-color: #28a745;
+  background-color: #d4edda;
+}
+
+.drag-drop-zone__content h3 {
+  margin: 1rem 0 0.5rem 0;
+  color: #495057;
+}
+
+.drag-drop-zone__content p {
+  margin: 0;
+  color: #6c757d;
+}

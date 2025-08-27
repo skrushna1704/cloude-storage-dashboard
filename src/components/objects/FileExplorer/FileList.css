@@ -1,0 +1,85 @@
+.file-list {
+  width: 100%;
+}
+
+.file-list__header {
+  display: grid;
+  grid-template-columns: 1fr 100px 120px 150px;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.file-list__header-cell {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.file-list__header-cell:hover {
+  color: #007bff;
+}
+
+.file-list__header-cell--sorted {
+  color: #007bff;
+}
+
+.file-list__item {
+  display: grid;
+  grid-template-columns: 1fr 100px 120px 150px;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #f1f3f4;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.file-list__item:hover {
+  background-color: #f8f9fa;
+}
+
+.file-list__item--selected {
+  background-color: #e3f2fd;
+  border-left: 3px solid #007bff;
+}
+
+.file-list__item--folder {
+  font-weight: 500;
+}
+
+.file-list__item-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.file-list__item-icon {
+  color: #6c757d;
+  flex-shrink: 0;
+}
+
+.file-list__item-name {
+  color: #495057;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-list__item-size {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.file-list__item-date {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.file-list__item-type {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
