@@ -1,27 +1,74 @@
-export const fetchObjects = async (bucketId: string, path: string = '/') => {
-  // Mock objects data
-  return [
-    {
-      key: 'documents/',
-      name: 'documents',
-      size: 0,
-      isFolder: true,
-      lastModified: new Date('2024-03-15'),
-      contentType: 'application/x-directory',
-      etag: '',
-      storageClass: 'STANDARD',
-      metadata: {},
+import { API_BASE_URL } from './constants';
+
+export interface ObjectMetadata {
+  key: string;
+  name: string;
+  size: number;
+  isFolder: boolean;
+  lastModified: string;
+  contentType: string;
+  etag: string;
+  storageClass: string;
+  metadata: Record<string, any>;
+}
+
+export interface CreateObjectRequest {
+  key: string;
+  name: string;
+  size?: number;
+  isFolder?: boolean;
+  contentType?: string;
+  metadata?: Record<string, any>;
+}
+
+export const fetchObjects = async (bucketId: string, path: string = '/'): Promise<ObjectMetadata[]> => {
+  const response = await fetch(`${API_BASE_URL}/buckets/${bucketId}/objects?path=${encodeURIComponent(path)}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch objects');
+  }
+  return response.json();
+};
+
+export const createObject = async (bucketId: string, objectData: CreateObjectRequest): Promise<ObjectMetadata> => {
+  const response = await fetch(`${API_BASE_URL}/buckets/${bucketId}/objects`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-    {
-      key: 'documents/report.pdf',
-      name: 'report.pdf',
-      size: 1024 * 1024 * 2.5, // 2.5MB
-      isFolder: false,
-      lastModified: new Date('2024-03-14'),
-      contentType: 'application/pdf',
-      etag: 'abc123',
-      storageClass: 'STANDARD',
-      metadata: {},
-    },
-  ];
+    body: JSON.stringify(objectData),
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to create object');
+  }
+  return response.json();
+};
+
+export const deleteObject = async (bucketId: string, key: string): Promise<void> => {
+  const response = await fetch(`${API_BASE_URL}/buckets/${bucketId}/objects/${encodeURIComponent(key)}`, {
+    method: 'DELETE',
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to delete object');
+  }
+};
+
+export const uploadFile = async (bucketId: string, file: File, key?: string): Promise<{ success: boolean; object: ObjectMetadata }> => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('bucketId', bucketId);
+  if (key) {
+    formData.append('key', key);
+  }
+
+  const response = await fetch(`${API_BASE_URL}/upload`, {
+    method: 'POST',
+    body: formData,
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to upload file');
+  }
+  return response.json();
 };

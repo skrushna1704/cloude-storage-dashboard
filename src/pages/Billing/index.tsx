@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Heading,
@@ -51,109 +51,52 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 import {
-  FiDollarSign,
   FiCreditCard,
   FiFileText,
   FiDownload,
   FiEye,
   FiPlus,
-  FiCalendar,
   FiTrendingUp,
-  FiTrendingDown,
   FiAlertCircle,
   FiCheckCircle,
   FiClock,
 } from 'react-icons/fi';
+import { fetchBillingData } from '../../services/api/billing';
+import type { Invoice, PaymentMethod } from '../../services/api/billing';
+import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 
-interface Invoice {
-  id: string;
-  date: string;
-  amount: number;
-  status: 'paid' | 'pending' | 'overdue';
-  description: string;
-  invoiceNumber: string;
-}
 
-interface PaymentMethod {
-  id: string;
-  type: 'card' | 'bank';
-  last4: string;
-  brand: string;
-  expiryDate: string;
-  isDefault: boolean;
-}
-
-const mockInvoices: Invoice[] = [
-  {
-    id: '1',
-    date: '2024-03-01',
-    amount: 124.67,
-    status: 'paid',
-    description: 'March 2024 - Cloud Storage Services',
-    invoiceNumber: 'INV-202403-001',
-  },
-  {
-    id: '2',
-    date: '2024-02-01',
-    amount: 98.45,
-    status: 'paid',
-    description: 'February 2024 - Cloud Storage Services',
-    invoiceNumber: 'INV-202402-001',
-  },
-  {
-    id: '3',
-    date: '2024-01-01',
-    amount: 156.78,
-    status: 'paid',
-    description: 'January 2024 - Cloud Storage Services',
-    invoiceNumber: 'INV-202401-001',
-  },
-  {
-    id: '4',
-    date: '2024-04-01',
-    amount: 145.23,
-    status: 'pending',
-    description: 'April 2024 - Cloud Storage Services',
-    invoiceNumber: 'INV-202404-001',
-  },
-];
-
-const mockPaymentMethods: PaymentMethod[] = [
-  {
-    id: '1',
-    type: 'card',
-    last4: '4242',
-    brand: 'Visa',
-    expiryDate: '12/25',
-    isDefault: true,
-  },
-  {
-    id: '2',
-    type: 'card',
-    last4: '5555',
-    brand: 'Mastercard',
-    expiryDate: '08/26',
-    isDefault: false,
-  },
-];
 
 export const Billing: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('current');
+  const [billingData, setBillingData] = useState<any>(null);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { isOpen: isAddPaymentOpen, onOpen: onAddPaymentOpen, onClose: onAddPaymentClose } = useDisclosure();
   
   const cardBg = useColorModeValue('white', 'gray.700');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
   const hoverBg = useColorModeValue('gray.50', 'gray.700');
 
-  const billingData = {
-    currentMonth: 124.67,
-    previousMonth: 98.45,
-    trend: 26.7,
-    totalStorage: 83.4,
-    storageLimit: 100,
-    upcomingPayment: 145.23,
-    dueDate: '2024-04-15',
-  };
+  useEffect(() => {
+    const loadBillingData = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchBillingData();
+        setBillingData(data);
+        setInvoices(data.invoices);
+        setPaymentMethods(data.paymentMethods);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load billing data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadBillingData();
+  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -172,6 +115,40 @@ export const Billing: React.FC = () => {
       default: return <FiClock />;
     }
   };
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minH="400px">
+        <LoadingSpinner />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box>
+        <Alert status="error" borderRadius="lg" mb={6}>
+          <AlertIcon />
+          <Box>
+            <AlertTitle>Error loading billing data</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Box>
+        </Alert>
+      </Box>
+    );
+  }
+
+  if (!billingData) {
+    return (
+      <Box>
+        <Alert status="warning" borderRadius="lg">
+          <AlertIcon />
+          <AlertTitle>No billing data available</AlertTitle>
+          <AlertDescription>Please try refreshing the page.</AlertDescription>
+        </Alert>
+      </Box>
+    );
+  }
 
   return (
     <Box>
@@ -242,10 +219,10 @@ export const Billing: React.FC = () => {
             <Stat>
               <StatLabel fontSize="sm" color="gray.500" mb={1}>Payment Methods</StatLabel>
               <StatNumber fontSize="2xl" color="purple.500" mb={2}>
-                {mockPaymentMethods.length}
+                {paymentMethods.length}
               </StatNumber>
               <StatHelpText fontSize="xs">
-                {mockPaymentMethods.filter(pm => pm.isDefault).length} default
+                {paymentMethods.filter(pm => pm.isDefault).length} default
               </StatHelpText>
             </Stat>
           </CardBody>
@@ -308,7 +285,7 @@ export const Billing: React.FC = () => {
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {mockInvoices.map((invoice) => (
+                      {invoices.map((invoice) => (
                         <Tr key={invoice.id} _hover={{ bg: hoverBg }}>
                           <Td border="none" py={4}>
                             <VStack align="start" spacing={1}>
@@ -365,7 +342,7 @@ export const Billing: React.FC = () => {
               </CardHeader>
               <CardBody pt={0}>
                 <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-                  {mockPaymentMethods.map((method) => (
+                  {paymentMethods.map((method) => (
                     <Card key={method.id} variant="outline" borderColor={borderColor}>
                       <CardBody>
                         <HStack justify="space-between" align="start">

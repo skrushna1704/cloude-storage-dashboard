@@ -10,7 +10,6 @@ import { BucketList } from '../../components/buckets/BucketList';
 import { BucketOperations } from '../../components/buckets/BucketOperations';
 import { CreateBucketModal } from '../../components/buckets/CreateBucketModal';
 import { RenameBucketModal } from '../../components/buckets/RenameBucketModal';
-import { BUCKETS } from '../../constants/mockdata';
 import { Bucket } from '../../types/bucket';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAppSelector } from '../../hooks/useAppSelector';
@@ -21,7 +20,7 @@ import {
 } from '../../store/selectors';
 import {
   setBuckets,
-  createBucket,
+  createBucket as createBucketAction,
   deleteBuckets,
   selectMultipleBuckets,
   toggleVersioningForBuckets,
@@ -31,6 +30,7 @@ import {
 } from '../../store/slices/bucketsSlice';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { showSuccessNotification, showErrorNotification, showInfoNotification } from '../../store/slices/uiSlice';
+import { fetchBuckets, createBucket as createBucketAPI, deleteBucket as deleteBucketAPI, Bucket as APIBucket } from '../../services/api/buckets';
 
 
 export const Buckets: React.FC = () => {
@@ -49,12 +49,42 @@ export const Buckets: React.FC = () => {
   console.log("buckets", buckets);
   
   // Local storage for persistence
-  const [storedBuckets, setStoredBuckets] = useLocalStorage<Bucket[]>('cloud-storage-buckets', BUCKETS);
+  const [storedBuckets, setStoredBuckets] = useLocalStorage<Bucket[]>('cloud-storage-buckets', []);
 
-  // Initialize buckets from localStorage on component mount
+  // Helper function to convert API bucket to Redux bucket
+  const convertAPIBucketToReduxBucket = (apiBucket: APIBucket): Bucket => ({
+    id: apiBucket.id,
+    name: apiBucket.name,
+    region: apiBucket.region,
+    size: apiBucket.size,
+    objects: apiBucket.objectCount,
+    lastModified: apiBucket.createdAt,
+    storageClass: 'STANDARD',
+    versioning: false,
+    encryption: true,
+    publicRead: false,
+    created: apiBucket.createdAt,
+    cost: 0,
+  });
+
+  // Load buckets from API on component mount
   useEffect(() => {
-    if (buckets.length === 0 && storedBuckets.length > 0) {
-      dispatch(setBuckets(storedBuckets));
+    const loadBuckets = async () => {
+      try {
+        const apiBuckets = await fetchBuckets();
+        const reduxBuckets = apiBuckets.map(convertAPIBucketToReduxBucket);
+        dispatch(setBuckets(reduxBuckets));
+      } catch (error) {
+        console.error('Failed to load buckets from API:', error);
+        // Fallback to localStorage if API fails
+        if (storedBuckets.length > 0) {
+          dispatch(setBuckets(storedBuckets));
+        }
+      }
+    };
+
+    if (buckets.length === 0) {
+      loadBuckets();
     }
   }, [dispatch, buckets.length, storedBuckets]);
 
@@ -65,20 +95,17 @@ export const Buckets: React.FC = () => {
     }
   }, [buckets, setStoredBuckets]);
 
-  const handleCreateBucket = (bucketData: any) => {
+  const handleCreateBucket = async (bucketData: any) => {
     try {
-      dispatch(createBucket({
+      // Create bucket via API
+      const newAPIBucket = await createBucketAPI({
         name: bucketData.name,
         region: bucketData.region,
-        size: 0,
-        sizeLimit: 100,
-        objects: 0,
-        storageClass: bucketData.storageClass || 'Standard',
-        versioning: bucketData.versioning || false,
-        encryption: bucketData.encryption !== false,
-        publicRead: bucketData.publicRead || false,
-        cost: 0,
-      }));
+      });
+      
+      // Convert to Redux format and add to store
+      const newReduxBucket = convertAPIBucketToReduxBucket(newAPIBucket);
+      dispatch(createBucketAction(newReduxBucket));
       
       dispatch(showSuccessNotification({
         title: 'Bucket Created',
@@ -94,14 +121,22 @@ export const Buckets: React.FC = () => {
     }
   };
 
-  const handleDeleteBucket = (bucketId: string, bucketName: string) => {
+  const handleDeleteBucket = async (bucketId: string, bucketName: string) => {
     try {
+      console.log('Attempting to delete bucket:', bucketId, bucketName);
+      
+      // Delete bucket via API
+      await deleteBucketAPI(bucketId);
+      
+      // Remove from Redux store
       dispatch(deleteBuckets([bucketId]));
+      
       dispatch(showSuccessNotification({
         title: 'Bucket Deleted',
         message: `Bucket "${bucketName}" deleted successfully`
       }));
     } catch (error) {
+      console.error('Delete bucket error:', error);
       dispatch(showErrorNotification({
         title: 'Error',
         message: 'Failed to delete bucket'
@@ -109,9 +144,14 @@ export const Buckets: React.FC = () => {
     }
   };
 
-  const handleDeleteBuckets = (bucketIds: string[]) => {
+  const handleDeleteBuckets = async (bucketIds: string[]) => {
     try {
+      // Delete buckets via API
+      await Promise.all(bucketIds.map(id => deleteBucketAPI(id)));
+      
+      // Remove from Redux store
       dispatch(deleteBuckets(bucketIds));
+      
       dispatch(showSuccessNotification({
         title: 'Buckets Deleted',
         message: `${bucketIds.length} bucket(s) deleted successfully`
