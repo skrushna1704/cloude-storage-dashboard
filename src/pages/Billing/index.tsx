@@ -154,16 +154,16 @@ export const Billing: React.FC = () => {
     <Box>
       {/* Header */}
       <VStack align="start" spacing={1} mb={8}>
-        <Heading size="xl" bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text">
+        <Heading size={{ base: "lg", md: "xl" }} bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text">
           Billing & Payments
         </Heading>
-        <Text color="gray.600" fontSize="lg">
+        <Text color="gray.600" fontSize={{ base: "md", md: "lg" }}>
           Manage your billing information, view invoices, and track payments
         </Text>
       </VStack>
 
       {/* Billing Overview Cards */}
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mb={8}>
+      <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing={6} mb={8}>
         <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="green.500">
           <CardBody>
             <Stat>
@@ -391,7 +391,7 @@ export const Billing: React.FC = () => {
                     </Box>
                   </Alert>
                   
-                  <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+                  <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={6}>
                     <Card variant="outline" borderColor={borderColor}>
                       <CardBody textAlign="center">
                         <Icon as={FiTrendingUp} boxSize={8} color="green.500" mb={2} />
@@ -427,9 +427,9 @@ export const Billing: React.FC = () => {
       </Tabs>
 
       {/* Add Payment Method Modal */}
-      <Modal isOpen={isAddPaymentOpen} onClose={onAddPaymentClose} size="lg">
+      <Modal isOpen={isAddPaymentOpen} onClose={onAddPaymentClose} size={{ base: "full", md: "lg" }}>
         <ModalOverlay />
-        <ModalContent>
+                  <ModalContent mx={{ base: 4, md: 0 }}>
           <ModalHeader>Add Payment Method</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

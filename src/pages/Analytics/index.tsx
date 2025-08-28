@@ -25,7 +25,7 @@ import {
   Tr,
   Th,
   Td,
-  TableContainer,
+
 
   Button,
   Menu,
@@ -113,19 +113,19 @@ export const Analytics: React.FC = () => {
   return (
     <Box>
       {/* Header */}
-      <Flex justify="space-between" align="center" mb={8}>
+      <Flex justify="space-between" align="center" mb={8} direction={{ base: "column", md: "row" }} gap={4}>
         <VStack align="start" spacing={1}>
-          <Heading size="xl" bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text">
+          <Heading size={{ base: "lg", md: "xl" }} bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text">
             Analytics Dashboard
           </Heading>
-          <Text color="gray.600" fontSize="lg">
+          <Text color="gray.600" fontSize={{ base: "md", md: "lg" }}>
             Monitor your storage usage, costs, and performance metrics
           </Text>
         </VStack>
         
-        <HStack>
+        <HStack spacing={3}>
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline">
+            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline" size={{ base: "sm", md: "md" }}>
               Last 30 Days
             </MenuButton>
             <MenuList>
@@ -135,7 +135,7 @@ export const Analytics: React.FC = () => {
               <MenuItem>Last Year</MenuItem>
             </MenuList>
           </Menu>
-          <Button leftIcon={<DownloadIcon />} variant="outline">
+          <Button leftIcon={<DownloadIcon />} variant="outline" size={{ base: "sm", md: "md" }}>
             Export Report
           </Button>
         </HStack>
@@ -238,7 +238,7 @@ export const Analytics: React.FC = () => {
       </SimpleGrid>
 
       {/* Charts Row */}
-      <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6} mb={8}>
+      <SimpleGrid columns={{ base: 1, md: 1, lg: 2 }} spacing={6} mb={8}>
         {/* Storage by Type */}
         <Card bg={cardBg} shadow="md" borderRadius="xl">
           <CardHeader>
@@ -308,16 +308,16 @@ export const Analytics: React.FC = () => {
       {/* Top Buckets Table */}
       <Card bg={cardBg} shadow="md" borderRadius="xl">
         <CardHeader>
-          <Flex justify="space-between" align="center">
-            <Heading size="md">Top Buckets by Usage</Heading>
-            <Button size="sm" variant="outline" leftIcon={<ViewIcon />}>
+          <Flex justify="space-between" align="center" direction={{ base: "column", md: "row" }} gap={3}>
+            <Heading size={{ base: "md", md: "md" }}>Top Buckets by Usage</Heading>
+            <Button size={{ base: "sm", md: "sm" }} variant="outline" leftIcon={<ViewIcon />}>
               View All
             </Button>
           </Flex>
         </CardHeader>
         <CardBody pt={0}>
-          <TableContainer>
-            <Table variant="simple" size="md">
+          <Box overflowX="auto">
+            <Table variant="simple" size={{ base: "sm", md: "md" }}>
               <Thead>
                 <Tr>
                   <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs">
@@ -375,7 +375,7 @@ export const Analytics: React.FC = () => {
                 ))}
               </Tbody>
             </Table>
-          </TableContainer>
+          </Box>
         </CardBody>
       </Card>
     </Box>

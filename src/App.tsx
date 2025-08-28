@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
@@ -30,7 +30,7 @@ const App: React.FC = () => {
                 <Suspense fallback={<LoadingSpinner />}>
                   <Routes>
                     {/* Default redirect to buckets */}
-                    <Route path="/" element={<Navigate to={ROUTES.BUCKETS} replace />} />
+                    {/* <Route path={ROUTES.BUCKETS} element={<Navigate to={ROUTES.BUCKETS} replace />} /> */}
                     
                     {/* Main buckets page */}
                     <Route path={ROUTES.BUCKETS} element={<Buckets />} />

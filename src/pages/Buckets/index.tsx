@@ -265,10 +265,10 @@ export const Buckets: React.FC = () => {
     <Box>
       {/* Header Section */}
       <VStack align="start" spacing={1} mb={8}>
-        <Heading size="xl" bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text">
+        <Heading size={{ base: "lg", md: "xl" }} bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text">
           Storage Buckets
         </Heading>
-        <Text color="gray.600" fontSize="lg">
+        <Text color="gray.600" fontSize={{ base: "md", md: "lg" }}>
           Manage your cloud storage buckets and data
         </Text>
       </VStack>

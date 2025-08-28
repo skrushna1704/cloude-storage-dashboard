@@ -34,7 +34,7 @@ import {
   Tr,
   Th,
   Td,
-  TableContainer,
+
   Icon,
   AlertDialog,
   AlertDialogBody,
@@ -92,8 +92,8 @@ export const BucketDetail: React.FC = () => {
     return bucket ? {
       name: bucket.name,
       region: bucket.region,
-      size: bucket.size + totalSize, // Add uploaded files size
-      objects: bucket.objects + totalObjects, // Add uploaded files count
+      size: totalSize, // Use only the files size for realistic display
+      objects: totalObjects, // Use only the files count
       created: bucket.created,
       storageClass: bucket.storageClass,
       versioning: bucket.versioning,
@@ -338,12 +338,12 @@ export const BucketDetail: React.FC = () => {
       </Breadcrumb>
 
       {/* Header */}
-      <Flex justify="space-between" align="start" mb={8}>
+      <Flex justify="space-between" align="start" mb={8} direction={{ base: "column", md: "row" }} gap={4}>
         <VStack align="start" spacing={2}>
-          <Heading size="xl" bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text">
+          <Heading size={{ base: "lg", md: "xl" }} bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text">
             {bucketInfo.name}
           </Heading>
-          <HStack spacing={3}>
+          <HStack spacing={3} flexWrap="wrap">
             <Badge colorScheme={getStorageClassColor(bucketInfo.storageClass)}>
               {bucketInfo.storageClass}
             </Badge>
@@ -354,15 +354,15 @@ export const BucketDetail: React.FC = () => {
           </HStack>
         </VStack>
         
-        <HStack>
-          <Button leftIcon={<ViewIcon />} variant="outline" size="md" onClick={() => navigate(`/analytics/bucket/${bucketId}`)}>
+        <HStack spacing={3}>
+          <Button leftIcon={<ViewIcon />} variant="outline" size={{ base: "sm", md: "md" }} onClick={() => navigate(`/analytics/bucket/${bucketId}`)}>
             Monitor
           </Button>
-          <Button leftIcon={<SettingsIcon />} variant="outline" size="md" onClick={handleEditProperties}>
+          <Button leftIcon={<SettingsIcon />} variant="outline" size={{ base: "sm", md: "md" }} onClick={handleEditProperties}>
             Configure
           </Button>
           <Menu>
-            <MenuButton as={IconButton} icon={<SettingsIcon />} variant="outline" />
+            <MenuButton as={IconButton} icon={<SettingsIcon />} variant="outline" size={{ base: "sm", md: "md" }} />
             <MenuList>
               <MenuItem icon={<EditIcon />} onClick={handleEditProperties}>Edit Properties</MenuItem>
               <MenuItem icon={<DownloadIcon />} onClick={handleExportData}>Export Data</MenuItem>
@@ -474,20 +474,20 @@ export const BucketDetail: React.FC = () => {
       {/* Files and Folders */}
       <Card bg={cardBg} shadow="md" borderRadius="xl">
         <CardBody>
-          <Flex justify="space-between" align="center" mb={6}>
+          <Flex justify="space-between" align="center" mb={6} direction={{ base: "column", md: "row" }} gap={4}>
             <Heading size="md">Objects</Heading>
-            <HStack>
-              <Button leftIcon={<ViewIcon />} size="sm" variant="outline" onClick={handleUploadFiles}>
+            <HStack spacing={3}>
+              <Button leftIcon={<ViewIcon />} size={{ base: "sm", md: "sm" }} variant="outline" onClick={handleUploadFiles}>
                 Upload Files
               </Button>
-              <Button leftIcon={<ViewIcon />} size="sm" variant="outline" onClick={handleCreateFolder}>
+              <Button leftIcon={<ViewIcon />} size={{ base: "sm", md: "sm" }} variant="outline" onClick={handleCreateFolder}>
                 Create Folder
               </Button>
             </HStack>
           </Flex>
           
-          <TableContainer>
-            <Table variant="simple" size="md">
+          <Box overflowX="auto">
+            <Table variant="simple" size={{ base: "sm", md: "md" }}>
               <Thead>
                 <Tr>
                   <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs">
@@ -512,35 +512,35 @@ export const BucketDetail: React.FC = () => {
                     _hover={{ bg: tableRowHoverBg }}
                     cursor="pointer"
                   >
+                                         <Td border="none" py={4}>
+                       <HStack spacing={3}>
+                         <FileIcon type={file.type} />
+                         <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }}>{file.name}</Text>
+                       </HStack>
+                     </Td>
+                                         <Td border="none" py={4}>
+                       <Text fontSize={{ base: "sm", md: "sm" }} color="gray.600">
+                         {formatSize(file.size)}
+                       </Text>
+                     </Td>
+                                         <Td border="none" py={4}>
+                       <Badge colorScheme={getStorageClassColor(file.storageClass)} size={{ base: "sm", md: "sm" }}>
+                         {file.storageClass}
+                       </Badge>
+                     </Td>
+                                         <Td border="none" py={4}>
+                       <Text fontSize={{ base: "sm", md: "sm" }} color="gray.600">
+                         {file.modified}
+                       </Text>
+                     </Td>
                     <Td border="none" py={4}>
-                      <HStack>
-                        <FileIcon type={file.type} />
-                        <Text fontWeight="medium">{file.name}</Text>
-                      </HStack>
-                    </Td>
-                    <Td border="none" py={4}>
-                      <Text fontSize="sm" color="gray.600">
-                        {formatSize(file.size)}
-                      </Text>
-                    </Td>
-                    <Td border="none" py={4}>
-                      <Badge colorScheme={getStorageClassColor(file.storageClass)} size="sm">
-                        {file.storageClass}
-                      </Badge>
-                    </Td>
-                    <Td border="none" py={4}>
-                      <Text fontSize="sm" color="gray.600">
-                        {file.modified}
-                      </Text>
-                    </Td>
-                    <Td border="none" py={4}>
-                      <Menu>
-                        <MenuButton
-                          as={IconButton}
-                          icon={<SettingsIcon />}
-                          variant="ghost"
-                          size="sm"
-                        />
+                                             <Menu>
+                         <MenuButton
+                           as={IconButton}
+                           icon={<SettingsIcon />}
+                           variant="ghost"
+                           size={{ base: "sm", md: "sm" }}
+                         />
                         <MenuList>
                           <MenuItem icon={<DownloadIcon />} onClick={() => handleDownloadFile(file)}>Download</MenuItem>
                           <MenuItem icon={<EditIcon />} onClick={() => handleRenameFile(file)}>Rename</MenuItem>
@@ -554,9 +554,9 @@ export const BucketDetail: React.FC = () => {
                     </Td>
                   </Tr>
                 ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                             </Tbody>
+             </Table>
+           </Box>
           
           {files.length === 0 && (
             <Box textAlign="center" py={16}>
@@ -606,9 +606,9 @@ export const BucketDetail: React.FC = () => {
          onOpen={handleOpenFile}
        />
 
-      <Modal isOpen={isEditPropertiesModalOpen} onClose={handleCloseEditPropertiesModal}>
-        <ModalOverlay />
-        <ModalContent>
+             <Modal isOpen={isEditPropertiesModalOpen} onClose={handleCloseEditPropertiesModal} size={{ base: "full", md: "md" }}>
+         <ModalOverlay />
+         <ModalContent mx={{ base: 4, md: 0 }}>
           <ModalHeader>Edit Properties</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -622,9 +622,9 @@ export const BucketDetail: React.FC = () => {
         </ModalContent>
       </Modal>
 
-      <Modal isOpen={isExportDataModalOpen} onClose={handleCloseExportDataModal}>
-        <ModalOverlay />
-        <ModalContent>
+             <Modal isOpen={isExportDataModalOpen} onClose={handleCloseExportDataModal} size={{ base: "full", md: "md" }}>
+         <ModalOverlay />
+         <ModalContent mx={{ base: 4, md: 0 }}>
           <ModalHeader>Export Data</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -684,9 +684,9 @@ export const BucketDetail: React.FC = () => {
         </AlertDialogOverlay>
       </AlertDialog>
 
-      <Modal isOpen={isRenameModalOpen} onClose={handleCloseRenameModal}>
-        <ModalOverlay />
-        <ModalContent>
+             <Modal isOpen={isRenameModalOpen} onClose={handleCloseRenameModal} size={{ base: "full", md: "md" }}>
+         <ModalOverlay />
+         <ModalContent mx={{ base: 4, md: 0 }}>
           <ModalHeader>Rename File</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -707,9 +707,9 @@ export const BucketDetail: React.FC = () => {
         </ModalContent>
       </Modal>
 
-      <Modal isOpen={isViewPropertiesModalOpen} onClose={handleCloseViewPropertiesModal}>
-        <ModalOverlay />
-        <ModalContent>
+             <Modal isOpen={isViewPropertiesModalOpen} onClose={handleCloseViewPropertiesModal} size={{ base: "full", md: "md" }}>
+         <ModalOverlay />
+         <ModalContent mx={{ base: 4, md: 0 }}>
           <ModalHeader>File Properties</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

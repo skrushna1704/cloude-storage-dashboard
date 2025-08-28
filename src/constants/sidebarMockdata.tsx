@@ -1,22 +1,22 @@
 import { NavItem } from '../types/sidebar';
 import { ROUTES } from '../constants/routes';
 import { Icon } from '@chakra-ui/react';
-import { FiHome, FiFolderPlus, FiDollarSign, FiBarChart, FiClock, FiShare2, FiTrash2 } from 'react-icons/fi';
+import { FiHome, FiDollarSign, FiBarChart, FiClock, FiShare2, FiTrash2 } from 'react-icons/fi';
 
 
 
 // Updated navigation items for cloud storage dashboard
 export const navItems: NavItem[] = [
+    // {
+    //   label: 'Dashboard',
+    //   path: '/',
+    //   icon: <Icon as={FiHome} boxSize={5} />,
+    //   section: 'main',
+    // },
     {
       label: 'Dashboard',
-      path: '/',
-      icon: <Icon as={FiHome} boxSize={5} />,
-      section: 'main',
-    },
-    {
-      label: 'Buckets',
       path: ROUTES.BUCKETS,
-      icon: <Icon as={FiFolderPlus} boxSize={5} />,
+      icon: <Icon as={FiHome} boxSize={5} />,
       badge: '12',
       section: 'main',
     },

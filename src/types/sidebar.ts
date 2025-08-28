@@ -8,6 +8,7 @@ export interface NavItem {
 
 export interface SidebarProps {
     collapsed?: boolean;
+    onClose?: () => void;
   }
 
   export interface Bucket {

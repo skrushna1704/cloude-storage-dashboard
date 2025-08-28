@@ -21,7 +21,7 @@ import { NavItem } from '../../../types/sidebar';
 import { navItems, quickItems } from '../../../constants/sidebarMockdata';
 import { SidebarProps } from '../../../types/sidebar';
 
-export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onClose }) => {
   const location = useLocation();
   
   // Extract ALL useColorModeValue calls to the top level (before any conditional logic)
@@ -77,6 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false }) => {
             bg: active ? activeBg : hoverBgColor,
             transform: 'translateX(4px)',
           }}
+          onClick={onClose}
           _before={{
             content: '""',
             position: 'absolute',

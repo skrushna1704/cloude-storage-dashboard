@@ -13,6 +13,7 @@ export interface Bucket {
   export interface HeaderProps {
     sidebarCollapsed?: boolean;
     onSidebarToggle?: () => void;
+    mobileSidebarOpen?: boolean;
     // New props for navigation context
     currentPage?: 'dashboard' | 'buckets' | 'files' | 'uploads' | 'billing' | 'analytics';
     currentBucket?: Bucket | null;
