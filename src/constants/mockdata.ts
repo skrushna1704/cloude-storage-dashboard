@@ -203,3 +203,141 @@ export const BUCKETS = [
         color: 'orange',
       },
     ];
+
+// Analytics mock data
+export const analyticsData = {
+  totalStorage: 83.4,
+  storageLimit: 100,
+  monthlyCost: 124.67,
+  costTrend: 12.3,
+  requests: 45678,
+  requestsTrend: -5.2,
+  bandwidth: 1.2,
+  bandwidthTrend: 18.7,
+  topBuckets: [
+    { name: 'production-assets', size: 25.6, cost: 34.21, requests: 15420, trend: 'up' },
+    { name: 'backup-data', size: 40.2, cost: 52.45, requests: 8930, trend: 'down' },
+    { name: 'media-uploads', size: 15.8, cost: 28.91, requests: 18200, trend: 'up' },
+    { name: 'logs-archive', size: 2.3, cost: 9.10, requests: 3128, trend: 'stable' },
+  ],
+  storageByType: [
+    { type: 'Standard', size: 45.2, percentage: 54.2, cost: 65.43, color: 'blue' },
+    { type: 'Standard-IA', size: 28.7, percentage: 34.4, cost: 42.18, color: 'orange' },
+    { type: 'Glacier', size: 9.5, percentage: 11.4, cost: 17.06, color: 'teal' },
+  ],
+  costBreakdown: [
+    { category: 'Storage', amount: 89.45, percentage: 71.8, icon: 'ViewIcon', color: 'blue' },
+    { category: 'Requests', amount: 23.12, percentage: 18.5, icon: 'ArrowUpIcon', color: 'green' },
+    { category: 'Data Transfer', amount: 12.10, percentage: 9.7, icon: 'DownloadIcon', color: 'orange' },
+  ],
+  alerts: [
+    { type: 'warning', message: 'Storage usage is at 83% of limit', severity: 'medium' },
+    { type: 'info', message: 'Monthly costs increased by 12.3%', severity: 'low' },
+    { type: 'success', message: 'All backups completed successfully', severity: 'low' },
+  ],
+};
+
+ // Mock data - replace with real data
+ export const costData = {
+  current: {
+    total: 124.67,
+    storage: 89.45,
+    requests: 23.12,
+    transfer: 12.10,
+  },
+  previous: {
+    total: 111.23,
+    storage: 82.30,
+    requests: 28.45,
+    transfer: 10.25,
+  },
+  forecast: 138.50,
+  bucketCosts: [
+    { name: 'production-assets', cost: 45.23, percentage: 36.3 },
+    { name: 'backup-data', cost: 32.18, percentage: 25.8 },
+    { name: 'media-uploads', cost: 28.91, percentage: 23.2 },
+    { name: 'logs-archive', cost: 18.35, percentage: 14.7 },
+  ],
+  costAlerts: [
+    {
+      type: 'warning',
+      title: 'Budget Alert',
+      description: 'Monthly spend is projected to exceed budget by 15%',
+      severity: 'medium',
+    },
+    {
+      type: 'info',
+      title: 'Cost Optimization',
+      description: 'Consider moving infrequently accessed data to Standard-IA',
+      severity: 'low',
+    },
+  ],
+};
+
+
+export const timeRanges = [
+  { value: 'week', label: 'Last 7 Days' },
+  { value: 'month', label: 'Last 30 Days' },
+  { value: 'quarter', label: 'Last Quarter' },
+  { value: 'year', label: 'Last Year' },
+];
+
+
+  // Mock data - replace with real data
+  export const storageData = {
+    totalUsed: 83.4,
+    totalLimit: 100,
+    byType: [
+      {
+        type: 'Standard',
+        used: 45.2,
+        total: 100,
+        percentage: 54.2,
+        cost: 65.43,
+        color: 'blue',
+        files: 1250,
+      },
+      {
+        type: 'Standard-IA',
+        used: 28.7,
+        total: 100,
+        percentage: 34.4,
+        cost: 42.18,
+        color: 'orange',
+        files: 856,
+      },
+      {
+        type: 'Glacier',
+        used: 9.5,
+        total: 100,
+        percentage: 11.4,
+        cost: 17.06,
+        color: 'teal',
+        files: 234,
+      },
+    ],
+    byRegion: [
+      { region: 'us-east-1', used: 35.2, percentage: 42.2, buckets: 5 },
+      { region: 'us-west-2', used: 28.1, percentage: 33.7, buckets: 3 },
+      { region: 'eu-west-1', used: 20.1, percentage: 24.1, buckets: 4 },
+    ],
+    growthTrend: {
+      thisMonth: 12.3,
+      lastMonth: 8.7,
+      threeMonthsAgo: 5.2,
+    },
+    alerts: [
+      {
+        type: 'warning',
+        title: 'Storage Limit Warning',
+        description: 'You are using 83% of your storage limit',
+        severity: 'medium',
+      },
+      {
+        type: 'info',
+        title: 'Growth Trend',
+        description: 'Storage usage has increased by 12.3% this month',
+        severity: 'low',
+      },
+    ],
+  };

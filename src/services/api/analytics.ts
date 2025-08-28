@@ -1,62 +1,110 @@
-import { API_BASE_URL } from './constants';
+import { AnalyticsData } from '../../types/analytics';
 
-export interface StorageUsage {
-  total: number;
-  used: number;
-  available: number;
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
+
+export interface AnalyticsResponse {
+  success: boolean;
+  data: AnalyticsData;
+  timestamp: string;
 }
 
-export interface CostData {
-  monthly: number;
-  yearly: number;
+export interface AnalyticsPeriodResponse extends AnalyticsResponse {
+  period: string;
 }
 
-export interface UsageTrend {
-  month: string;
-  usage: number;
+export interface ExportResponse {
+  success: boolean;
+  message: string;
+  downloadUrl: string;
+  timestamp: string;
 }
 
-export interface BucketUsage {
-  bucket: string;
-  usage: number;
-  cost: number;
-}
+export const analyticsApi = {
+  /**
+   * Get analytics data for the current period
+   */
+  async getAnalytics(): Promise<AnalyticsData> {
+    const response = await fetch(`${API_BASE_URL}/api/analytics`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch analytics data');
+    }
+    const result: AnalyticsResponse = await response.json();
+    return result.data;
+  },
 
-export interface AnalyticsData {
-  storageUsage: StorageUsage;
-  costData: CostData;
-  usageTrends: UsageTrend[];
-  bucketUsage: BucketUsage[];
-}
+  /**
+   * Get analytics data for a specific time period
+   */
+  async getAnalyticsByPeriod(period: string): Promise<AnalyticsData> {
+    const response = await fetch(`${API_BASE_URL}/api/analytics/${period}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch analytics data for period: ${period}`);
+    }
+    const result: AnalyticsPeriodResponse = await response.json();
+    return result.data;
+  },
 
-export const fetchAnalytics = async (): Promise<AnalyticsData> => {
-  const response = await fetch(`${API_BASE_URL}/analytics`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch analytics');
-  }
-  return response.json();
-};
+  /**
+   * Export analytics report
+   */
+  async exportReport(period: string = '30d'): Promise<string> {
+    const response = await fetch(`${API_BASE_URL}/api/analytics/export`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ period }),
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to export analytics report');
+    }
+    
+    const result: ExportResponse = await response.json();
+    return result.downloadUrl;
+  },
 
-export const fetchStorageUsage = async (): Promise<StorageUsage> => {
-  const response = await fetch(`${API_BASE_URL}/analytics/storage`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch storage usage');
-  }
-  return response.json();
-};
+  /**
+   * Get cost breakdown data
+   */
+  async getCostBreakdown() {
+    const response = await fetch(`${API_BASE_URL}/api/analytics/costs`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch cost breakdown');
+    }
+    return response.json();
+  },
 
-export const fetchCostData = async (): Promise<CostData> => {
-  const response = await fetch(`${API_BASE_URL}/analytics/costs`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch cost data');
-  }
-  return response.json();
-};
+  /**
+   * Get storage metrics
+   */
+  async getStorageMetrics() {
+    const response = await fetch(`${API_BASE_URL}/api/analytics/storage`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch storage metrics');
+    }
+    return response.json();
+  },
 
-export const fetchUsageTrends = async (): Promise<UsageTrend[]> => {
-  const response = await fetch(`${API_BASE_URL}/analytics/trends`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch usage trends');
-  }
-  return response.json();
+  /**
+   * Get top buckets data
+   */
+  async getTopBuckets() {
+    const response = await fetch(`${API_BASE_URL}/api/analytics/buckets`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch top buckets');
+    }
+    return response.json();
+  },
+
+  /**
+   * Get alerts
+   */
+  async getAlerts() {
+    const response = await fetch(`${API_BASE_URL}/api/analytics/alerts`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch alerts');
+    }
+    return response.json();
+  },
 };

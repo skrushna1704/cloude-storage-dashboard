@@ -2,6 +2,52 @@
  * Type definitions for analytics and metrics
  */
 
+// Analytics data types for the dashboard
+export interface AnalyticsData {
+  totalStorage: number;
+  storageLimit: number;
+  monthlyCost: number;
+  costTrend: number;
+  requests: number;
+  requestsTrend: number;
+  bandwidth: number;
+  bandwidthTrend: number;
+  topBuckets: TopBucket[];
+  storageByType: StorageByType[];
+  costBreakdown: CostBreakdown[];
+  alerts: Alert[];
+}
+
+export interface TopBucket {
+  name: string;
+  size: number;
+  cost: number;
+  requests: number;
+  trend: 'up' | 'down' | 'stable';
+}
+
+export interface StorageByType {
+  type: string;
+  size: number;
+  percentage: number;
+  cost: number;
+  color: string;
+}
+
+export interface CostBreakdown {
+  category: string;
+  amount: number;
+  percentage: number;
+  icon: string;
+  color: string;
+}
+
+export interface Alert {
+  type: 'warning' | 'info' | 'success';
+  message: string;
+  severity: 'low' | 'medium' | 'high';
+}
+
 // Time periods for analytics
 export type TimePeriod = '1h' | '6h' | '24h' | '7d' | '30d' | '90d' | '1y' | 'custom';
 export type MetricGranularity = '1m' | '5m' | '15m' | '1h' | '6h' | '1d' | '1w' | '1M';
@@ -334,4 +380,47 @@ export interface AnomalyDetection {
   description: string;
   bucketId?: string;
   region?: string;
+}
+
+
+
+export interface CostData {
+  category: string;
+  amount: number;
+  percentage: number;
+  trend: 'up' | 'down' | 'stable';
+  color: string;
+  previousAmount?: number;
+}
+
+export interface CostChartProps {
+  data?: CostData[];
+  title?: string;
+  totalCost?: number;
+}
+
+export interface UsageData {
+  label: string;
+  used: number;
+  total: number;
+  unit: string;
+  color: string;
+  trend?: {
+    direction: 'up' | 'down' | 'stable';
+    percentage: number;
+  };
+}
+
+export interface UsageChartProps {
+  data?: UsageData[];
+  title?: string;
+  showCircular?: boolean;
+}
+
+export interface CostAnalyticsProps {
+  timeRange?: 'week' | 'month' | 'quarter' | 'year';
+}
+
+export interface StorageUsageProps {
+  showDetailed?: boolean;
 }

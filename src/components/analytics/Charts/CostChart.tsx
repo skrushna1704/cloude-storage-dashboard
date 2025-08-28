@@ -9,28 +9,12 @@ import {
   HStack,
   Text,
   Progress,
-  SimpleGrid,
   Badge,
-  Icon,
   useColorModeValue,
   Flex,
 } from '@chakra-ui/react';
-import { ViewIcon, ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons';
-
-interface CostData {
-  category: string;
-  amount: number;
-  percentage: number;
-  trend: 'up' | 'down' | 'stable';
-  color: string;
-  previousAmount?: number;
-}
-
-interface CostChartProps {
-  data?: CostData[];
-  title?: string;
-  totalCost?: number;
-}
+import { CostChartProps } from '../../../types/analytics';
+import { calculateChange, getTrendIcons } from '../../../utils/analytics';
 
 export const CostChart: React.FC<CostChartProps> = ({
   data = [
@@ -64,20 +48,6 @@ export const CostChart: React.FC<CostChartProps> = ({
 }) => {
   const cardBg = useColorModeValue('white', 'gray.700');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
-
-  const getTrendIcon = (trend: string, change: number) => {
-    if (trend === 'up') {
-      return <ChevronUpIcon color="red.500" boxSize={3} />;
-    } else if (trend === 'down') {
-      return <ChevronDownIcon color="green.500" boxSize={3} />;
-    }
-    return <ViewIcon color="gray.500" boxSize={3} />;
-  };
-
-  const calculateChange = (current: number, previous?: number) => {
-    if (!previous) return 0;
-    return ((current - previous) / previous) * 100;
-  };
 
   return (
     <Card bg={cardBg} shadow="md" borderRadius="xl" border="1px solid" borderColor={borderColor}>
@@ -123,7 +93,7 @@ export const CostChart: React.FC<CostChartProps> = ({
                       </Text>
                       {item.previousAmount && (
                         <HStack spacing={1}>
-                          {getTrendIcon(item.trend, change)}
+                          {getTrendIcons(item.trend, change)}
                           <Text
                             fontSize="xs"
                             color={item.trend === 'up' ? 'red.500' : item.trend === 'down' ? 'green.500' : 'gray.500'}

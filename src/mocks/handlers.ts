@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw';
+import { analyticsData } from '../constants/mockdata';
 
 // Mock data
 const mockBuckets: Array<{
@@ -122,28 +123,28 @@ const mockObjects: Record<string, Array<{
   ],
 };
 
-const mockAnalytics = {
-  storageUsage: {
-    total: 1024 * 1024 * 1024 * 100, // 100GB
-    used: 1024 * 1024 * 1024 * 65,   // 65GB
-    available: 1024 * 1024 * 1024 * 35, // 35GB
-  },
-  costData: {
-    monthly: 45.67,
-    yearly: 548.04,
-  },
-  usageTrends: [
-    { month: 'Jan', usage: 50 },
-    { month: 'Feb', usage: 55 },
-    { month: 'Mar', usage: 60 },
-    { month: 'Apr', usage: 65 },
-  ],
-  bucketUsage: [
-    { bucket: 'my-bucket-1', usage: 25, cost: 12.50 },
-    { bucket: 'my-bucket-2', usage: 40, cost: 20.00 },
-    { bucket: 'backup-bucket', usage: 15, cost: 7.50 },
-  ],
-};
+// const mockAnalytics = {
+//   storageUsage: {
+//     total: 1024 * 1024 * 1024 * 100, // 100GB
+//     used: 1024 * 1024 * 1024 * 65,   // 65GB
+//     available: 1024 * 1024 * 1024 * 35, // 35GB
+//   },
+//   costData: {
+//     monthly: 45.67,
+//     yearly: 548.04,
+//   },
+//   usageTrends: [
+//     { month: 'Jan', usage: 50 },
+//     { month: 'Feb', usage: 55 },
+//     { month: 'Mar', usage: 60 },
+//     { month: 'Apr', usage: 65 },
+//   ],
+//   bucketUsage: [
+//     { bucket: 'my-bucket-1', usage: 25, cost: 12.50 },
+//     { bucket: 'my-bucket-2', usage: 40, cost: 20.00 },
+//     { bucket: 'backup-bucket', usage: 15, cost: 7.50 },
+//   ],
+// };
 
 const mockBilling = {
   invoices: [
@@ -297,19 +298,81 @@ export const handlers = [
 
   // Analytics API
   http.get('/api/analytics', () => {
-    return HttpResponse.json(mockAnalytics);
+    return HttpResponse.json({
+      success: true,
+      data: analyticsData,
+      timestamp: new Date().toISOString(),
+    });
   }),
 
-  http.get('/api/analytics/storage', () => {
-    return HttpResponse.json(mockAnalytics.storageUsage);
+  http.get('/api/analytics/:period', ({ params }) => {
+    const { period } = params;
+    
+    // Mock different data based on period
+    const periodData = {
+      '7d': { ...analyticsData, monthlyCost: 98.45, costTrend: -8.2 },
+      '30d': analyticsData,
+      '90d': { ...analyticsData, monthlyCost: 156.78, costTrend: 25.6 },
+      '1y': { ...analyticsData, monthlyCost: 189.23, costTrend: 45.2 },
+    };
+
+    return HttpResponse.json({
+      success: true,
+      data: periodData[period as keyof typeof periodData] || analyticsData,
+      period,
+      timestamp: new Date().toISOString(),
+    });
+  }),
+
+  http.post('/api/analytics/export', async ({ request }) => {
+    const body = await request.json() as { period: string };
+    return HttpResponse.json({
+      success: true,
+      message: 'Report exported successfully',
+      downloadUrl: `/api/analytics/export/report-${body.period}-${new Date().toISOString().split('T')[0]}.pdf`,
+      timestamp: new Date().toISOString(),
+    });
   }),
 
   http.get('/api/analytics/costs', () => {
-    return HttpResponse.json(mockAnalytics.costData);
+    return HttpResponse.json({
+      success: true,
+      data: {
+        breakdown: analyticsData.costBreakdown,
+        total: analyticsData.monthlyCost,
+        trend: analyticsData.costTrend,
+      },
+      timestamp: new Date().toISOString(),
+    });
   }),
 
-  http.get('/api/analytics/trends', () => {
-    return HttpResponse.json(mockAnalytics.usageTrends);
+  http.get('/api/analytics/storage', () => {
+    return HttpResponse.json({
+      success: true,
+      data: {
+        total: analyticsData.totalStorage,
+        limit: analyticsData.storageLimit,
+        byType: analyticsData.storageByType,
+        usage: (analyticsData.totalStorage / analyticsData.storageLimit) * 100,
+      },
+      timestamp: new Date().toISOString(),
+    });
+  }),
+
+  http.get('/api/analytics/buckets', () => {
+    return HttpResponse.json({
+      success: true,
+      data: analyticsData.topBuckets,
+      timestamp: new Date().toISOString(),
+    });
+  }),
+
+  http.get('/api/analytics/alerts', () => {
+    return HttpResponse.json({
+      success: true,
+      data: analyticsData.alerts,
+      timestamp: new Date().toISOString(),
+    });
   }),
 
   // Billing API

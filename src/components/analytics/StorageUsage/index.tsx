@@ -31,14 +31,12 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  Icon,
 } from '@chakra-ui/react';
-import { ChevronDownIcon, WarningIcon, InfoIcon, CheckCircleIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import { UsageChart } from '../Charts/UsageChart';
-
-interface StorageUsageProps {
-  showDetailed?: boolean;
-}
+import { StorageUsageProps } from '../../../types/analytics';
+import { storageData } from '../../../constants/mockdata';
+import { getUsageColors, formatSizes } from '../../../utils/analytics';
 
 export const StorageUsage: React.FC<StorageUsageProps> = ({
   showDetailed = true
@@ -47,78 +45,8 @@ export const StorageUsage: React.FC<StorageUsageProps> = ({
   const cardBg = useColorModeValue('white', 'gray.700');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
-  // Mock data - replace with real data
-  const storageData = {
-    totalUsed: 83.4,
-    totalLimit: 100,
-    byType: [
-      {
-        type: 'Standard',
-        used: 45.2,
-        total: 100,
-        percentage: 54.2,
-        cost: 65.43,
-        color: 'blue',
-        files: 1250,
-      },
-      {
-        type: 'Standard-IA',
-        used: 28.7,
-        total: 100,
-        percentage: 34.4,
-        cost: 42.18,
-        color: 'orange',
-        files: 856,
-      },
-      {
-        type: 'Glacier',
-        used: 9.5,
-        total: 100,
-        percentage: 11.4,
-        cost: 17.06,
-        color: 'teal',
-        files: 234,
-      },
-    ],
-    byRegion: [
-      { region: 'us-east-1', used: 35.2, percentage: 42.2, buckets: 5 },
-      { region: 'us-west-2', used: 28.1, percentage: 33.7, buckets: 3 },
-      { region: 'eu-west-1', used: 20.1, percentage: 24.1, buckets: 4 },
-    ],
-    growthTrend: {
-      thisMonth: 12.3,
-      lastMonth: 8.7,
-      threeMonthsAgo: 5.2,
-    },
-    alerts: [
-      {
-        type: 'warning',
-        title: 'Storage Limit Warning',
-        description: 'You are using 83% of your storage limit',
-        severity: 'medium',
-      },
-      {
-        type: 'info',
-        title: 'Growth Trend',
-        description: 'Storage usage has increased by 12.3% this month',
-        severity: 'low',
-      },
-    ],
-  };
 
-  const getUsageColor = (percentage: number) => {
-    if (percentage >= 90) return 'red';
-    if (percentage >= 75) return 'orange';
-    if (percentage >= 50) return 'yellow';
-    return 'green';
-  };
 
-  const formatSize = (sizeInGB: number): string => {
-    if (sizeInGB >= 1000) {
-      return `${(sizeInGB / 1000).toFixed(1)} TB`;
-    }
-    return `${sizeInGB.toFixed(1)} GB`;
-  };
 
   const overallUsagePercentage = (storageData.totalUsed / storageData.totalLimit) * 100;
 
@@ -188,13 +116,13 @@ export const StorageUsage: React.FC<StorageUsageProps> = ({
             <VStack spacing={4}>
               <CircularProgress
                 value={overallUsagePercentage}
-                color={`${getUsageColor(overallUsagePercentage)}.500`}
+                color={`${getUsageColors(overallUsagePercentage)}.500`}
                 size="120px"
                 thickness="12px"
               >
                 <CircularProgressLabel>
                   <VStack spacing={0}>
-                    <Text fontSize="xl" fontWeight="bold" color={`${getUsageColor(overallUsagePercentage)}.600`}>
+                    <Text fontSize="xl" fontWeight="bold" color={`${getUsageColors(overallUsagePercentage)}.600`}>
                       {overallUsagePercentage.toFixed(0)}%
                     </Text>
                     <Text fontSize="xs" color="gray.500">
@@ -205,10 +133,10 @@ export const StorageUsage: React.FC<StorageUsageProps> = ({
               </CircularProgress>
               <VStack spacing={0} textAlign="center">
                 <Text fontSize="lg" fontWeight="semibold">
-                  {formatSize(storageData.totalUsed)}
+                  {formatSizes(storageData.totalUsed)}
                 </Text>
                 <Text fontSize="sm" color="gray.500">
-                  of {formatSize(storageData.totalLimit)}
+                  of {formatSizes(storageData.totalLimit)}
                 </Text>
               </VStack>
             </VStack>
@@ -228,7 +156,7 @@ export const StorageUsage: React.FC<StorageUsageProps> = ({
                       </Text>
                     </HStack>
                     <Text fontSize="sm" fontWeight="semibold" color={`${type.color}.600`}>
-                      {formatSize(type.used)}
+                      {formatSizes(type.used)}
                     </Text>
                   </Flex>
                   <Progress
@@ -323,7 +251,7 @@ export const StorageUsage: React.FC<StorageUsageProps> = ({
                       <Text fontWeight="medium">{region.region}</Text>
                     </Td>
                     <Td border="none" py={4} isNumeric>
-                      <Text fontSize="sm">{formatSize(region.used)}</Text>
+                      <Text fontSize="sm">{formatSizes(region.used)}</Text>
                     </Td>
                     <Td border="none" py={4} isNumeric>
                       <Badge colorScheme="purple" variant="subtle">

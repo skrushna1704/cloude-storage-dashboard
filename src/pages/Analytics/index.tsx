@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Heading,
@@ -25,91 +25,95 @@ import {
   Tr,
   Th,
   Td,
-
-
   Button,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
+  useToast,
 } from '@chakra-ui/react';
 import {
   ViewIcon,
   DownloadIcon,
   WarningIcon,
-  CheckCircleIcon,
   ChevronDownIcon,
-  ChevronUpIcon,
   ArrowUpIcon,
 } from '@chakra-ui/icons';
 import { testIds } from '../../shared/dataTestIds';
+import { AnalyticsData } from '../../types/analytics';
+import { analyticsApi } from '../../services/api/analytics';
+import {
+  formatSize,
+  getStorageUsageColor,
+  getTrendIcon,
+  getAlertIcon,
+  formatCurrency,
+  formatNumber,
+  getTrendColorScheme,
+  getSeverityColor,
+} from '../../utils/analytics';
 
 export const Analytics: React.FC = () => {
   const cardBg = useColorModeValue('white', 'gray.700');
   const tableRowHoverBg = useColorModeValue('gray.50', 'gray.700');
+  const toast = useToast();
   
-  // Mock analytics data
-  const analyticsData = {
-    totalStorage: 83.4,
-    storageLimit: 100,
-    monthlyCost: 124.67,
-    costTrend: 12.3,
-    requests: 45678,
-    requestsTrend: -5.2,
-    bandwidth: 1.2,
-    bandwidthTrend: 18.7,
-    topBuckets: [
-      { name: 'production-assets', size: 25.6, cost: 34.21, requests: 15420, trend: 'up' },
-      { name: 'backup-data', size: 40.2, cost: 52.45, requests: 8930, trend: 'down' },
-      { name: 'media-uploads', size: 15.8, cost: 28.91, requests: 18200, trend: 'up' },
-      { name: 'logs-archive', size: 2.3, cost: 9.10, requests: 3128, trend: 'stable' },
-    ],
-    storageByType: [
-      { type: 'Standard', size: 45.2, percentage: 54.2, cost: 65.43, color: 'blue' },
-      { type: 'Standard-IA', size: 28.7, percentage: 34.4, cost: 42.18, color: 'orange' },
-      { type: 'Glacier', size: 9.5, percentage: 11.4, cost: 17.06, color: 'teal' },
-    ],
-    costBreakdown: [
-      { category: 'Storage', amount: 89.45, percentage: 71.8, icon: ViewIcon, color: 'blue' },
-      { category: 'Requests', amount: 23.12, percentage: 18.5, icon: ArrowUpIcon, color: 'green' },
-      { category: 'Data Transfer', amount: 12.10, percentage: 9.7, icon: DownloadIcon, color: 'orange' },
-    ],
-    alerts: [
-      { type: 'warning', message: 'Storage usage is at 83% of limit', severity: 'medium' },
-      { type: 'info', message: 'Monthly costs increased by 12.3%', severity: 'low' },
-      { type: 'success', message: 'All backups completed successfully', severity: 'low' },
-    ],
-  };
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedPeriod, setSelectedPeriod] = useState('30d');
 
-  const formatSize = (sizeInGB: number): string => {
-    if (sizeInGB >= 1000) {
-      return `${(sizeInGB / 1000).toFixed(1)} TB`;
-    }
-    return `${sizeInGB.toFixed(1)} GB`;
-  };
+  useEffect(() => {
+    fetchAnalyticsData();
+  }, [selectedPeriod]);
 
-  const getStorageUsageColor = () => {
-    const usage = (analyticsData.totalStorage / analyticsData.storageLimit) * 100;
-    if (usage >= 90) return 'red';
-    if (usage >= 75) return 'orange';
-    return 'blue';
-  };
-
-  const getTrendIcon = (trend: string) => {
-    switch (trend) {
-      case 'up': return <ChevronUpIcon color="green.500" boxSize={4} />;
-      case 'down': return <ChevronDownIcon color="red.500" boxSize={4} />;
-      default: return <ViewIcon color="gray.500" boxSize={4} />;
+  const fetchAnalyticsData = async () => {
+    try {
+      setLoading(true);
+      const data = await analyticsApi.getAnalyticsByPeriod(selectedPeriod);
+      setAnalyticsData(data);
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to load analytics data',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getAlertIcon = (type: string) => {
-    switch (type) {
-      case 'warning': return <WarningIcon color="orange.500" />;
-      case 'success': return <CheckCircleIcon color="green.500" />;
-      default: return <ViewIcon color="blue.500" />;
+  const handleExportReport = async () => {
+    try {
+      const downloadUrl = await analyticsApi.exportReport(selectedPeriod);
+      toast({
+        title: 'Success',
+        description: 'Report exported successfully',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      // In a real app, you would trigger the download here
+      console.log('Download URL:', downloadUrl);
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to export report',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
+
+  if (loading || !analyticsData) {
+    return (
+      <Box data-testid={testIds.analytics_page}>
+        <Text>Loading analytics data...</Text>
+      </Box>
+    );
+  }
 
   return (
     <Box data-testid={testIds.analytics_page}>
@@ -127,16 +131,25 @@ export const Analytics: React.FC = () => {
         <HStack spacing={3}>
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline" size={{ base: "sm", md: "md" }} data-testid={testIds.analytics_period_selector}>
-              Last 30 Days
+              {selectedPeriod === '7d' ? 'Last 7 Days' : 
+               selectedPeriod === '30d' ? 'Last 30 Days' : 
+               selectedPeriod === '90d' ? 'Last 90 Days' : 
+               selectedPeriod === '1y' ? 'Last Year' : 'Last 30 Days'}
             </MenuButton>
             <MenuList>
-              <MenuItem>Last 7 Days</MenuItem>
-              <MenuItem>Last 30 Days</MenuItem>
-              <MenuItem>Last 90 Days</MenuItem>
-              <MenuItem>Last Year</MenuItem>
+              <MenuItem onClick={() => setSelectedPeriod('7d')}>Last 7 Days</MenuItem>
+              <MenuItem onClick={() => setSelectedPeriod('30d')}>Last 30 Days</MenuItem>
+              <MenuItem onClick={() => setSelectedPeriod('90d')}>Last 90 Days</MenuItem>
+              <MenuItem onClick={() => setSelectedPeriod('1y')}>Last Year</MenuItem>
             </MenuList>
           </Menu>
-          <Button leftIcon={<DownloadIcon />} variant="outline" size={{ base: "sm", md: "md" }} data-testid={testIds.export_report_btn}>
+          <Button 
+            leftIcon={<DownloadIcon />} 
+            variant="outline" 
+            size={{ base: "sm", md: "md" }} 
+            data-testid={testIds.export_report_btn}
+            onClick={handleExportReport}
+          >
             Export Report
           </Button>
         </HStack>
@@ -159,7 +172,7 @@ export const Analytics: React.FC = () => {
                   <Text flex="1" fontSize="sm">
                     {alert.message}
                   </Text>
-                  <Badge colorScheme={alert.severity === 'high' ? 'red' : alert.severity === 'medium' ? 'orange' : 'blue'}>
+                  <Badge colorScheme={getSeverityColor(alert.severity)}>
                     {alert.severity}
                   </Badge>
                 </HStack>
@@ -180,7 +193,7 @@ export const Analytics: React.FC = () => {
               </StatNumber>
               <Progress
                 value={(analyticsData.totalStorage / analyticsData.storageLimit) * 100}
-                colorScheme={getStorageUsageColor()}
+                colorScheme={getStorageUsageColor(analyticsData.totalStorage, analyticsData.storageLimit)}
                 size="sm"
                 borderRadius="full"
                 mb={2}
@@ -197,7 +210,7 @@ export const Analytics: React.FC = () => {
             <Stat>
               <StatLabel fontSize="sm" color="gray.500" mb={1}>Monthly Cost</StatLabel>
               <StatNumber fontSize="2xl" color="green.500" mb={2}>
-                ${analyticsData.monthlyCost}
+                {formatCurrency(analyticsData.monthlyCost)}
               </StatNumber>
               <StatHelpText fontSize="xs">
                 <StatArrow type={analyticsData.costTrend > 0 ? 'increase' : 'decrease'} />
@@ -212,7 +225,7 @@ export const Analytics: React.FC = () => {
             <Stat>
               <StatLabel fontSize="sm" color="gray.500" mb={1}>API Requests</StatLabel>
               <StatNumber fontSize="2xl" color="purple.500" mb={2}>
-                {analyticsData.requests.toLocaleString()}
+                {formatNumber(analyticsData.requests)}
               </StatNumber>
               <StatHelpText fontSize="xs">
                 <StatArrow type={analyticsData.requestsTrend > 0 ? 'increase' : 'decrease'} />
@@ -285,7 +298,15 @@ export const Analytics: React.FC = () => {
                 <Box key={item.category}>
                   <Flex justify="space-between" align="center" mb={2}>
                     <HStack>
-                      <Icon as={item.icon} color={`${item.color}.500`} boxSize={4} />
+                      <Icon 
+                        as={
+                          item.icon === 'ViewIcon' ? ViewIcon :
+                          item.icon === 'ArrowUpIcon' ? ArrowUpIcon :
+                          item.icon === 'DownloadIcon' ? DownloadIcon : ViewIcon
+                        } 
+                        color={`${item.color}.500`} 
+                        boxSize={4} 
+                      />
                       <Text fontSize="sm" fontWeight="medium">{item.category}</Text>
                     </HStack>
                     <VStack align="end" spacing={0}>
@@ -362,10 +383,7 @@ export const Analytics: React.FC = () => {
                       <HStack spacing={1}>
                         {getTrendIcon(bucket.trend)}
                         <Badge
-                          colorScheme={
-                            bucket.trend === 'up' ? 'green' : 
-                            bucket.trend === 'down' ? 'red' : 'gray'
-                          }
+                          colorScheme={getTrendColorScheme(bucket.trend)}
                           size="sm"
                         >
                           {bucket.trend}

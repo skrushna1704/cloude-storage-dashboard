@@ -22,25 +22,15 @@ import {
   MenuItem,
   useColorModeValue,
   Flex,
-  Divider,
   Alert,
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer,
 } from '@chakra-ui/react';
 import { ChevronDownIcon, DownloadIcon, CalendarIcon, WarningIcon } from '@chakra-ui/icons';
 import { CostChart } from '../Charts/CostChart';
-
-interface CostAnalyticsProps {
-  timeRange?: 'week' | 'month' | 'quarter' | 'year';
-}
+import {CostAnalyticsProps} from '../../../types/analytics'
+import {costData,timeRanges} from '../../../constants/mockdata'
 
 export const CostAnalytics: React.FC<CostAnalyticsProps> = ({
   timeRange = 'month'
@@ -49,54 +39,9 @@ export const CostAnalytics: React.FC<CostAnalyticsProps> = ({
   const cardBg = useColorModeValue('white', 'gray.700');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
-  // Mock data - replace with real data
-  const costData = {
-    current: {
-      total: 124.67,
-      storage: 89.45,
-      requests: 23.12,
-      transfer: 12.10,
-    },
-    previous: {
-      total: 111.23,
-      storage: 82.30,
-      requests: 28.45,
-      transfer: 10.25,
-    },
-    forecast: 138.50,
-    bucketCosts: [
-      { name: 'production-assets', cost: 45.23, percentage: 36.3 },
-      { name: 'backup-data', cost: 32.18, percentage: 25.8 },
-      { name: 'media-uploads', cost: 28.91, percentage: 23.2 },
-      { name: 'logs-archive', cost: 18.35, percentage: 14.7 },
-    ],
-    costAlerts: [
-      {
-        type: 'warning',
-        title: 'Budget Alert',
-        description: 'Monthly spend is projected to exceed budget by 15%',
-        severity: 'medium',
-      },
-      {
-        type: 'info',
-        title: 'Cost Optimization',
-        description: 'Consider moving infrequently accessed data to Standard-IA',
-        severity: 'low',
-      },
-    ],
-  };
-
   const calculateChange = (current: number, previous: number) => {
     return ((current - previous) / previous) * 100;
   };
-
-  const timeRanges = [
-    { value: 'week', label: 'Last 7 Days' },
-    { value: 'month', label: 'Last 30 Days' },
-    { value: 'quarter', label: 'Last Quarter' },
-    { value: 'year', label: 'Last Year' },
-  ];
-
   const totalChange = calculateChange(costData.current.total, costData.previous.total);
   const storageChange = calculateChange(costData.current.storage, costData.previous.storage);
   const requestsChange = calculateChange(costData.current.requests, costData.previous.requests);

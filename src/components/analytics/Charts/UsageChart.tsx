@@ -18,23 +18,8 @@ import {
   GridItem,
 } from '@chakra-ui/react';
 
-interface UsageData {
-  label: string;
-  used: number;
-  total: number;
-  unit: string;
-  color: string;
-  trend?: {
-    direction: 'up' | 'down' | 'stable';
-    percentage: number;
-  };
-}
-
-interface UsageChartProps {
-  data?: UsageData[];
-  title?: string;
-  showCircular?: boolean;
-}
+import { UsageChartProps } from '../../../types/analytics';
+import { formatValue, getUsagePercentage, getUsageColor, getTrendColor } from '../../../utils/analytics';
 
 export const UsageChart: React.FC<UsageChartProps> = ({
   data = [
@@ -77,33 +62,6 @@ export const UsageChart: React.FC<UsageChartProps> = ({
   const cardBg = useColorModeValue('white', 'gray.700');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
-  const formatValue = (value: number, unit: string) => {
-    if (unit === 'requests' && value >= 1000) {
-      return `${(value / 1000).toFixed(1)}K`;
-    }
-    if (value >= 1000 && (unit === 'GB' || unit === 'TB')) {
-      return unit === 'GB' ? `${(value / 1000).toFixed(1)} TB` : `${value.toFixed(1)} ${unit}`;
-    }
-    return `${value.toFixed(1)} ${unit}`;
-  };
-
-  const getUsagePercentage = (used: number, total: number) => {
-    return Math.min((used / total) * 100, 100);
-  };
-
-  const getUsageColor = (percentage: number) => {
-    if (percentage >= 90) return 'red';
-    if (percentage >= 75) return 'orange';
-    return 'green';
-  };
-
-  const getTrendColor = (direction: string) => {
-    switch (direction) {
-      case 'up': return 'red.500';
-      case 'down': return 'green.500';
-      default: return 'gray.500';
-    }
-  };
 
   if (showCircular) {
     return (
