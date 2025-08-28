@@ -18,13 +18,8 @@ import {
 import { useAppDispatch } from '../../../hooks/useAppDispatch';
 import { renameBucket } from '../../../store/slices/bucketsSlice';
 import { showSuccessNotification, showErrorNotification } from '../../../store/slices/uiSlice';
+import { RenameBucketModalProps } from '../../../types/bucket';
 
-interface RenameBucketModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  bucketId: string;
-  currentName: string;
-}
 
 export const RenameBucketModal: React.FC<RenameBucketModalProps> = ({
   isOpen,

@@ -240,6 +240,58 @@ export interface BucketCostAnalysis {
   };
 }
 
+// export interface Bucket {
+//   id: string;
+//   name: string;
+//   region: string;
+//   size: number;
+//   sizeLimit?: number;
+//   objects: number;
+//   lastModified: string;
+//   storageClass: string;
+//   versioning: boolean;
+//   encryption: boolean;
+//   publicRead: boolean;
+//   created?: string;
+//   cost?: number;
+// }
+
+export interface FileObject {
+  id: string;
+  name: string;
+  type: 'file' | 'folder';
+  size: number;
+  modified: string;
+  storageClass: string;
+  path: string;
+  mimeType?: string;
+  url?: string;
+}
+
+
+export interface BucketCardProps {
+  bucket: {
+    id: string;
+    name: string;
+    region: string;
+    size: number;
+    sizeLimit?: number;
+    objects: number;
+    lastModified: string;
+    storageClass: string;
+    versioning: boolean;
+    encryption: boolean;
+    publicRead: boolean;
+    created?: string;
+    cost?: number;
+  };
+  onDelete?: (bucketId: string, bucketName: string) => void;
+  onEdit?: (bucketId: string) => void;
+  onRename?: (bucketId: string, newName: string) => void;
+  onClick?: (bucketId: string) => void;
+}
+
+
 export interface Bucket {
   id: string;
   name: string;
@@ -256,14 +308,60 @@ export interface Bucket {
   cost?: number;
 }
 
-export interface FileObject {
-  id: string;
+export interface BucketListProps {
+  buckets: Bucket[];
+  onCreateBucket?: () => void;
+  onDeleteBucket?: (bucketId: string, bucketName: string) => void;
+  onEditBucket?: (bucketId: string) => void;
+  onRenameBucket?: (bucketId: string, currentName: string) => void;
+  onBucketClick?: (bucketId: string) => void;
+  onBucketSelect?: (bucketIds: string[]) => void;
+  selectedBuckets?: string[];
+  loading?: boolean;
+}
+
+
+export interface BucketOperationsProps {
+  selectedBuckets?: string[];
+  onCreateBucket?: () => void;
+  onDeleteBuckets?: (bucketIds: string[]) => void;
+  onExportBuckets?: (bucketIds: string[]) => void;
+  onConfigureBucket?: (bucketId: string) => void;
+  onSyncBuckets?: (bucketIds: string[]) => void;
+  onToggleEncryption?: (bucketIds: string[]) => void;
+  onToggleVersioning?: (bucketIds: string[]) => void;
+  onMakePublic?: (bucketIds: string[]) => void;
+  onMakePrivate?: (bucketIds: string[]) => void;
+  onRenameBuckets?: (bucketIds: string[]) => void;
+  totalBuckets?: number;
+}
+
+export type SortField = 'name' | 'size' | 'objects' | 'lastModified' | 'cost';
+export type SortOrder = 'asc' | 'desc';
+
+
+export interface CreateBucketModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onCreateBucket: (bucketData: BucketFormData) => void;
+  loading?: boolean;
+}
+
+export interface BucketFormData {
   name: string;
-  type: 'file' | 'folder';
-  size: number;
-  modified: string;
+  region: string;
   storageClass: string;
-  path: string;
-  mimeType?: string;
-  url?: string;
+  versioning: boolean;
+  encryption: boolean;
+  publicRead: boolean;
+  description?: string;
+  tags?: { key: string; value: string }[];
+}
+
+
+export interface RenameBucketModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  bucketId: string;
+  currentName: string;
 }

@@ -1,3 +1,4 @@
+import { StarIcon, ViewIcon } from "@chakra-ui/icons";
 import { FileObject } from "../types/bucket";
 import { Bucket } from "../types/header";
 
@@ -6,61 +7,61 @@ export const BUCKETS = [
       id: '1',
       name: 'production-assets',
       region: 'us-east-1',
-      size: 25.6,
-      sizeLimit: 100,
-      objects: 1250,
+      size: 25600, // 25 TB in GB
+      sizeLimit: 100000, // 100 TB limit
+      objects: 1250000,
       lastModified: '2 hours ago',
       created: '2023-08-15',
       storageClass: 'Standard',
       versioning: true,
       encryption: true,
       publicRead: false,
-      cost: 12.45,
+      cost: 1245.50,
     },
     {
       id: '2',
       name: 'backup-data',
       region: 'us-west-2',
-      size: 40.2,
-      sizeLimit: 200,
-      objects: 2100,
+      size: 40200, // 40.2 TB in GB
+      sizeLimit: 200000, // 200 TB limit
+      objects: 2100000,
       lastModified: '1 day ago',
       created: '2023-08-10',
       storageClass: 'Standard-IA',
       versioning: false,
       encryption: true,
       publicRead: false,
-      cost: 8.75,
+      cost: 875.25,
     },
     {
       id: '3',
       name: 'media-uploads',
       region: 'eu-west-1',
-      size: 15.8,
-      sizeLimit: 50,
-      objects: 856,
+      size: 15800, // 15.8 TB in GB
+      sizeLimit: 50000, // 50 TB limit
+      objects: 856000,
       lastModified: '3 hours ago',
       created: '2023-08-20',
       storageClass: 'Standard',
       versioning: true,
       encryption: false,
       publicRead: true,
-      cost: 5.20,
+      cost: 520.75,
     },
     {
       id: '4',
       name: 'logs-archive',
       region: 'ap-south-1',
-      size: 2.3,
-      sizeLimit: 10,
-      objects: 345,
+      size: 2300, // 2.3 TB in GB
+      sizeLimit: 10000, // 10 TB limit
+      objects: 345000,
       lastModified: '1 week ago',
       created: '2023-07-15',
       storageClass: 'Glacier',
       versioning: false,
       encryption: true,
       publicRead: false,
-      cost: 1.85,
+      cost: 185.30,
     },
   ]
 
@@ -131,3 +132,74 @@ export const BUCKETS = [
       },
     ]
     
+
+   export  const REGIONS = [
+      { value: 'us-east-1', label: 'US East (N. Virginia)', description: 'Lowest latency for US East Coast' },
+      { value: 'us-west-2', label: 'US West (Oregon)', description: 'Lowest latency for US West Coast' },
+      { value: 'eu-west-1', label: 'Europe (Ireland)', description: 'Lowest latency for Europe' },
+      { value: 'ap-south-1', label: 'Asia Pacific (Mumbai)', description: 'Lowest latency for India' },
+      { value: 'ap-southeast-1', label: 'Asia Pacific (Singapore)', description: 'Lowest latency for Southeast Asia' },
+    ];
+    
+    export const STORAGE_CLASSES = [
+      {
+        value: 'Standard',
+        label: 'Standard',
+        description: 'For frequently accessed data',
+        cost: '$0.023/GB/month',
+        color: 'green',
+      },
+      {
+        value: 'Standard-IA',
+        label: 'Standard-IA',
+        description: 'For infrequently accessed data',
+        cost: '$0.0125/GB/month',
+        color: 'orange',
+      },
+      {
+        value: 'Glacier',
+        label: 'Glacier',
+        description: 'For long-term archival',
+        cost: '$0.004/GB/month',
+        color: 'blue',
+      },
+    ];
+
+    export const plans = [
+      {
+        id: 'pro',
+        name: 'Pro',
+        icon: StarIcon,
+        price: '$29.99',
+        period: '/month',
+        description: 'Perfect for growing teams and businesses',
+        features: [
+          'Unlimited storage',
+          'Advanced analytics',
+          'Priority support',
+          'Custom branding',
+          'Team collaboration',
+          'API access',
+        ],
+        popular: true,
+        color: 'purple',
+      },
+      {
+        id: 'enterprise',
+        name: 'Enterprise',
+        icon: ViewIcon,
+        price: '$99.99',
+        period: '/month',
+        description: 'For large organizations with complex needs',
+        features: [
+          'Everything in Pro',
+          'Dedicated account manager',
+          'Custom integrations',
+          'Advanced security',
+          'SLA guarantees',
+          'On-premise options',
+        ],
+        popular: false,
+        color: 'orange',
+      },
+    ];

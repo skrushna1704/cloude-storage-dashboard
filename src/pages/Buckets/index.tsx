@@ -287,7 +287,7 @@ export const Buckets: React.FC = () => {
         onMakePublic={handleMakePublic}
         onMakePrivate={handleMakePrivate}
         onRenameBuckets={(bucketIds) => {
-          // For bulk rename, we'll rename the first selected bucket
+          // For bulk rename, i'll rename the first selected bucket
           if (bucketIds.length > 0) {
             const bucket = buckets.find(b => b.id === bucketIds[0]);
             if (bucket) {

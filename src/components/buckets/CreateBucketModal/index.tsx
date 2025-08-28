@@ -45,56 +45,9 @@ import {
   WarningIcon,
   CheckIcon,
 } from '@chakra-ui/icons';
+import { CreateBucketModalProps, BucketFormData } from '../../../types/bucket';
+import { STORAGE_CLASSES, REGIONS } from '../../../constants/mockdata';
 
-interface CreateBucketModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onCreateBucket: (bucketData: BucketFormData) => void;
-  loading?: boolean;
-}
-
-interface BucketFormData {
-  name: string;
-  region: string;
-  storageClass: string;
-  versioning: boolean;
-  encryption: boolean;
-  publicRead: boolean;
-  description?: string;
-  tags?: { key: string; value: string }[];
-}
-
-const REGIONS = [
-  { value: 'us-east-1', label: 'US East (N. Virginia)', description: 'Lowest latency for US East Coast' },
-  { value: 'us-west-2', label: 'US West (Oregon)', description: 'Lowest latency for US West Coast' },
-  { value: 'eu-west-1', label: 'Europe (Ireland)', description: 'Lowest latency for Europe' },
-  { value: 'ap-south-1', label: 'Asia Pacific (Mumbai)', description: 'Lowest latency for India' },
-  { value: 'ap-southeast-1', label: 'Asia Pacific (Singapore)', description: 'Lowest latency for Southeast Asia' },
-];
-
-const STORAGE_CLASSES = [
-  {
-    value: 'Standard',
-    label: 'Standard',
-    description: 'For frequently accessed data',
-    cost: '$0.023/GB/month',
-    color: 'green',
-  },
-  {
-    value: 'Standard-IA',
-    label: 'Standard-IA',
-    description: 'For infrequently accessed data',
-    cost: '$0.0125/GB/month',
-    color: 'orange',
-  },
-  {
-    value: 'Glacier',
-    label: 'Glacier',
-    description: 'For long-term archival',
-    cost: '$0.004/GB/month',
-    color: 'blue',
-  },
-];
 
 export const CreateBucketModal: React.FC<CreateBucketModalProps> = ({
   isOpen,

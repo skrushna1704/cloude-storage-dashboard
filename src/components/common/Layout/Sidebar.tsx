@@ -11,6 +11,7 @@ import {
   Flex,
   Badge,
   Divider,
+  useDisclosure,
 } from '@chakra-ui/react';
 import {
   ViewIcon,
@@ -21,9 +22,11 @@ import { NavItem } from '../../../types/sidebar';
 import { navItems, quickItems } from '../../../constants/sidebarMockdata';
 import { SidebarProps } from '../../../types/sidebar';
 import { testIds } from '../../../shared/dataTestIds';
+import { UpgradeModal } from '../UpgradeModal';
 
 export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onClose }) => {
   const location = useLocation();
+  const { isOpen: isUpgradeOpen, onOpen: onUpgradeOpen, onClose: onUpgradeClose } = useDisclosure();
   
   // Extract ALL useColorModeValue calls to the top level (before any conditional logic)
   const bgColor = useColorModeValue('rgba(255, 255, 255, 0.95)', 'rgba(26, 32, 44, 0.95)');
@@ -39,6 +42,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onClose }) 
   const upgradePromptBorder = useColorModeValue('blue.200', 'blue.700');
   const upgradePromptTextPrimary = useColorModeValue('blue.700', 'blue.200');
   const upgradePromptTextSecondary = useColorModeValue('blue.600', 'blue.300');
+  const upgradePromptHoverBg = useColorModeValue('blue.100', 'blue.800');
 
 
   const isActive = (path: string) => {
@@ -264,6 +268,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onClose }) 
                 borderRadius="md"
                 border="1px solid"
                 borderColor={upgradePromptBorder}
+                cursor="pointer"
+                _hover={{
+                  bg: upgradePromptHoverBg,
+                  transform: 'translateY(-1px)',
+                  shadow: 'sm',
+                }}
+                transition="all 0.2s ease"
+                onClick={onUpgradeOpen}
+                data-testid={testIds.upgrade_prompt}
               >
                 <Text fontSize="xs" color={upgradePromptTextPrimary} fontWeight="medium">
                   Need more space?
@@ -276,6 +289,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onClose }) 
           </Box>
         </Box>
       )}
+
+      {/* Upgrade Modal */}
+      <UpgradeModal
+        isOpen={isUpgradeOpen}
+        onClose={onUpgradeClose}
+        onUpgrade={(plan) => {
+          console.log(`Upgrading to ${plan} plan`);
+          // Here you would typically integrate with your payment processor
+          // For now, we'll just show a success message
+          onUpgradeClose();
+          // You could dispatch a Redux action or show a toast notification here
+        }}
+      />
     </Box>
   );
 };

@@ -91,14 +91,6 @@ Cypress.Commands.add('createBucket', (name: string) => {
 })
 
 // Custom command to get element by data-testid
-declare global {
-  namespace Cypress {
-    interface Chainable<Subject> {
-      getByData(testId: string): Chainable<JQuery<HTMLElement>>
-    }
-  }
-}
-
 Cypress.Commands.add('getByData', (testId: string) => {
   return cy.get(`[data-testid="${testId}"]`)
 })

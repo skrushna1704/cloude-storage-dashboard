@@ -339,6 +339,7 @@ const testIds = {
   // Success States
   success_message: 'success-message',
   success_icon: 'success-icon',
+  upgrade_prompt: 'upgrade-prompt',
 
   // Warning States
   warning_message: 'warning-message',

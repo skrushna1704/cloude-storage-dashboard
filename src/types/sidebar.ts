@@ -17,3 +17,9 @@ export interface SidebarProps {
     region: string;
     size: number;
   }
+
+  export interface UpgradeModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onUpgrade: (plan: string) => void;
+  }

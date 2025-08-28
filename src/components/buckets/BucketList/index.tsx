@@ -30,37 +30,7 @@ import {
 } from '@chakra-ui/icons';
 import { BucketCard } from '../BucketCard';
 import { testIds } from '../../../shared/dataTestIds';
-
-interface Bucket {
-  id: string;
-  name: string;
-  region: string;
-  size: number;
-  sizeLimit?: number;
-  objects: number;
-  lastModified: string;
-  storageClass: string;
-  versioning: boolean;
-  encryption: boolean;
-  publicRead: boolean;
-  created?: string;
-  cost?: number;
-}
-
-interface BucketListProps {
-  buckets: Bucket[];
-  onCreateBucket?: () => void;
-  onDeleteBucket?: (bucketId: string, bucketName: string) => void;
-  onEditBucket?: (bucketId: string) => void;
-  onRenameBucket?: (bucketId: string, currentName: string) => void;
-  onBucketClick?: (bucketId: string) => void;
-  onBucketSelect?: (bucketIds: string[]) => void;
-  selectedBuckets?: string[];
-  loading?: boolean;
-}
-
-type SortField = 'name' | 'size' | 'objects' | 'lastModified' | 'cost';
-type SortOrder = 'asc' | 'desc';
+import { BucketListProps, SortField, SortOrder } from '../../../types/bucket';
 
 export const BucketList: React.FC<BucketListProps> = ({
   buckets,
@@ -159,7 +129,9 @@ export const BucketList: React.FC<BucketListProps> = ({
     }
   };
 
-  const totalStorage = buckets.reduce((sum, bucket) => sum + bucket.size, 0);
+  // Calculate realistic total storage (convert GB to TB for display)
+  const totalStorageGB = buckets.reduce((sum, bucket) => sum + bucket.size, 0);
+  const totalStorageTB = totalStorageGB / 1024; // Convert GB to TB
   const totalObjects = buckets.reduce((sum, bucket) => sum + bucket.objects, 0);
   const totalCost = buckets.reduce((sum, bucket) => sum + (bucket.cost || 0), 0);
 
@@ -181,13 +153,13 @@ export const BucketList: React.FC<BucketListProps> = ({
             </VStack>
             <VStack spacing={1}>
               <Text fontSize="2xl" fontWeight="bold" color="green.500">
-                {totalStorage >= 1000 ? `${(totalStorage / 1000).toFixed(1)} TB` : `${totalStorage.toFixed(1)} GB`}
+                {totalStorageTB.toFixed(1)} GB
               </Text>
               <Text fontSize="sm" color="gray.500" data-test={testIds.total_storage_text}>Total Storage</Text>
             </VStack>
             <VStack spacing={1}>
               <Text fontSize="2xl" fontWeight="bold" color="purple.500">
-                {totalObjects.toLocaleString()}
+                {(totalObjects / 1000).toFixed(1)}K
               </Text>
               <Text fontSize="sm" color="gray.500" data-test={testIds.total_objects_text}>Total Objects</Text>
             </VStack>

@@ -21,29 +21,9 @@ import {
   ExternalLinkIcon,
 } from '@chakra-ui/icons';
 import { generateBucketDetailPath } from '../../../constants/routes';
-import { testIds } from '../../../shared/dataTestIds';
+import { BucketCardProps } from '../../../types/bucket';
+import { formatSize, getStorageClassColor, getUsageColor, getUsagePercentage } from '../../../utils/bucket-card-utils';
 
-interface BucketCardProps {
-  bucket: {
-    id: string;
-    name: string;
-    region: string;
-    size: number;
-    sizeLimit?: number;
-    objects: number;
-    lastModified: string;
-    storageClass: string;
-    versioning: boolean;
-    encryption: boolean;
-    publicRead: boolean;
-    created?: string;
-    cost?: number;
-  };
-  onDelete?: (bucketId: string, bucketName: string) => void;
-  onEdit?: (bucketId: string) => void;
-  onRename?: (bucketId: string, newName: string) => void;
-  onClick?: (bucketId: string) => void;
-}
 
 export const BucketCard: React.FC<BucketCardProps> = ({
   bucket,
@@ -55,40 +35,6 @@ export const BucketCard: React.FC<BucketCardProps> = ({
   const cardBg = useColorModeValue('white', 'gray.700');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
   const hoverBorderColor = useColorModeValue('#667eea', '#667eea');
-
-  const formatSize = (sizeInGB: number): string => {
-    if (sizeInGB >= 1000) {
-      return `${(sizeInGB / 1000).toFixed(1)} TB`;
-    }
-    return `${sizeInGB.toFixed(1)} GB`;
-  };
-
-  const getStorageClassColor = (storageClass: string) => {
-    switch (storageClass) {
-      case 'Standard':
-        return 'green';
-      case 'Standard-IA':
-        return 'orange';
-      case 'Glacier':
-        return 'blue';
-      case 'Glacier Deep Archive':
-        return 'purple';
-      default:
-        return 'gray';
-    }
-  };
-
-  const getUsagePercentage = () => {
-    if (!bucket.sizeLimit) return 0;
-    return Math.min((bucket.size / bucket.sizeLimit) * 100, 100);
-  };
-
-  const getUsageColor = () => {
-    const percentage = getUsagePercentage();
-    if (percentage >= 90) return 'red';
-    if (percentage >= 75) return 'orange';
-    return 'blue';
-  };
 
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -181,7 +127,7 @@ export const BucketCard: React.FC<BucketCardProps> = ({
               <Text fontSize="sm" color="gray.600" fontWeight="medium">
                 Storage Used
               </Text>
-              <Text fontSize="sm" fontWeight="bold" color={`${getUsageColor()}.500`}>
+              <Text fontSize="sm" fontWeight="bold" color={`${getUsageColor(bucket)}.500`}>
                 {formatSize(bucket.size)}
                 {bucket.sizeLimit && (
                   <Text as="span" color="gray.500" fontWeight="normal">
@@ -193,8 +139,8 @@ export const BucketCard: React.FC<BucketCardProps> = ({
             
             {bucket.sizeLimit ? (
               <Progress
-                value={getUsagePercentage()}
-                colorScheme={getUsageColor()}
+                value={getUsagePercentage(bucket)}
+                colorScheme={getUsageColor(bucket)}
                 size="sm"
                 borderRadius="full"
                 bg="gray.100"
@@ -226,7 +172,7 @@ export const BucketCard: React.FC<BucketCardProps> = ({
               Objects
             </Text>
             <Text fontSize="sm" fontWeight="bold" color="purple.500">
-              {bucket.objects.toLocaleString()}
+              {(bucket.objects / 1000).toFixed(1)}K
             </Text>
           </Flex>
 

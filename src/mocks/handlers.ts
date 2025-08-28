@@ -14,8 +14,8 @@ const mockBuckets: Array<{
     id: '1',
     name: 'my-bucket-1',
     region: 'us-east-1',
-    size: 1024 * 1024 * 1024 * 25, // 25GB
-    objectCount: 1250,
+    size: 25600, // 25 TB in GB
+    objectCount: 1250000,
     status: 'active',
     createdAt: '2024-01-15T00:00:00Z',
   },
@@ -23,8 +23,8 @@ const mockBuckets: Array<{
     id: '2',
     name: 'my-bucket-2',
     region: 'us-west-2',
-    size: 1024 * 1024 * 1024 * 40, // 40GB
-    objectCount: 2100,
+    size: 40200, // 40.2 TB in GB
+    objectCount: 2100000,
     status: 'active',
     createdAt: '2024-02-20T00:00:00Z',
   },
@@ -32,8 +32,8 @@ const mockBuckets: Array<{
     id: '3',
     name: 'backup-bucket',
     region: 'eu-west-1',
-    size: 1024 * 1024 * 1024 * 15, // 15GB
-    objectCount: 850,
+    size: 15800, // 15.8 TB in GB
+    objectCount: 856000,
     status: 'active',
     createdAt: '2024-03-10T00:00:00Z',
   },

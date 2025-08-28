@@ -91,4 +91,23 @@ describe('Comprehensive App Tests', () => {
       }
     })
   })
+
+  it('should test upgrade modal functionality', () => {
+    // Click on upgrade prompt in sidebar
+    cy.getByData(testIds.upgrade_prompt).should('be.visible')
+    cy.getByData(testIds.upgrade_prompt).click()
+    
+    // Modal should open
+    cy.get('h2').should('contain', 'Upgrade to CloudSync Pro')
+    
+    // Check for plan options
+    cy.get('body').should('contain', 'Pro')
+    cy.get('body').should('contain', 'Enterprise')
+    
+    // Close modal
+    cy.get('button[aria-label="Close"]').click()
+    
+    // Modal should be closed
+    cy.get('h2').should('not.contain', 'Upgrade to CloudSync Pro')
+  })
 })

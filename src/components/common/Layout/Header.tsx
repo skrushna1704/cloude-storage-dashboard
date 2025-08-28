@@ -40,6 +40,7 @@ import {
   ChevronRightIcon,
   ViewIcon,
 } from '@chakra-ui/icons';
+import { useNavigate } from 'react-router-dom';
 import { HeaderProps } from '../../../types/header';
 import { notifications, mockBuckets } from '../../../constants/mockdata';
 import { testIds } from '../../../shared/dataTestIds';
@@ -53,6 +54,7 @@ export const Header: React.FC<HeaderProps> = ({
   breadcrumbs = [],
   availableBuckets = [],
 }) => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const { isOpen: isNotificationOpen, onOpen: onNotificationOpen, onClose: onNotificationClose } = useDisclosure();
   
@@ -137,6 +139,8 @@ export const Header: React.FC<HeaderProps> = ({
                   bgGradient="linear(to-r, #667eea, #764ba2)"
                   bgClip="text"
                   data-testid={testIds.app_title}
+                  onClick={() => navigate('/buckets')}
+                  cursor={"pointer"}
                 >
                   CloudSync Pro
                 </Heading>

@@ -33,21 +33,8 @@ import {
   ChevronDownIcon,
 } from '@chakra-ui/icons';
 import { testIds } from '../../../shared/dataTestIds';
+import { BucketOperationsProps } from '../../../types/bucket';
 
-interface BucketOperationsProps {
-  selectedBuckets?: string[];
-  onCreateBucket?: () => void;
-  onDeleteBuckets?: (bucketIds: string[]) => void;
-  onExportBuckets?: (bucketIds: string[]) => void;
-  onConfigureBucket?: (bucketId: string) => void;
-  onSyncBuckets?: (bucketIds: string[]) => void;
-  onToggleEncryption?: (bucketIds: string[]) => void;
-  onToggleVersioning?: (bucketIds: string[]) => void;
-  onMakePublic?: (bucketIds: string[]) => void;
-  onMakePrivate?: (bucketIds: string[]) => void;
-  onRenameBuckets?: (bucketIds: string[]) => void;
-  totalBuckets?: number;
-}
 
 export const BucketOperations: React.FC<BucketOperationsProps> = ({
   selectedBuckets = [],
