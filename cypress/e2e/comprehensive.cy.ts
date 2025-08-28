@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+/// <reference types="../support/index" />
 import { testIds } from '../../src/shared/dataTestIds'
 
 describe('Comprehensive App Tests', () => {
