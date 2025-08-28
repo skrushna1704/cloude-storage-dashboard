@@ -1,0 +1,63 @@
+{
+  "billing": {
+    "currentMonth": 124.67,
+    "previousMonth": 98.45,
+    "trend": 26.7,
+    "totalStorage": 83.4,
+    "storageLimit": 100,
+    "upcomingPayment": 145.23,
+    "dueDate": "2024-04-15",
+    "invoices": [
+      {
+        "id": "1",
+        "date": "2024-03-01",
+        "amount": 124.67,
+        "status": "paid",
+        "description": "March 2024 - Cloud Storage Services",
+        "invoiceNumber": "INV-202403-001"
+      },
+      {
+        "id": "2",
+        "date": "2024-02-01",
+        "amount": 98.45,
+        "status": "paid",
+        "description": "February 2024 - Cloud Storage Services",
+        "invoiceNumber": "INV-202402-001"
+      },
+      {
+        "id": "3",
+        "date": "2024-01-01",
+        "amount": 156.78,
+        "status": "paid",
+        "description": "January 2024 - Cloud Storage Services",
+        "invoiceNumber": "INV-202401-001"
+      },
+      {
+        "id": "4",
+        "date": "2024-04-01",
+        "amount": 145.23,
+        "status": "pending",
+        "description": "April 2024 - Cloud Storage Services",
+        "invoiceNumber": "INV-202404-001"
+      }
+    ],
+    "paymentMethods": [
+      {
+        "id": "1",
+        "type": "card",
+        "last4": "4242",
+        "brand": "Visa",
+        "expiryDate": "12/25",
+        "isDefault": true
+      },
+      {
+        "id": "2",
+        "type": "card",
+        "last4": "5555",
+        "brand": "Mastercard",
+        "expiryDate": "08/26",
+        "isDefault": false
+      }
+    ]
+  }
+}

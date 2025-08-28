@@ -8,9 +8,6 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@reduxjs/toolkit": "^2.8.2",
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/react": "^16.3.0",
-    "@types/jest": "^27.5.2",
     "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.8",
     "@types/react-redux": "^7.1.34",
@@ -27,13 +24,15 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "cypress run",
+    "test:open": "cypress open",
+    "test:e2e": "cypress run --spec 'cypress/e2e/**/*.cy.ts'",
+    "test:component": "cypress run --component --spec 'cypress/component/**/*.cy.ts'",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -49,9 +48,9 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.8.0",
-    "@testing-library/user-event": "^14.6.1",
+    "@cypress/vite-dev-server": "^7.0.0",
     "@types/node": "^24.3.0",
+    "cypress": "^14.5.3",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.5",

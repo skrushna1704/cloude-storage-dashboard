@@ -1,0 +1,51 @@
+{
+  "buckets": [
+    {
+      "id": "1",
+      "name": "my-bucket-1",
+      "region": "us-east-1",
+      "size": 3145728,
+      "storageClass": "STANDARD",
+      "encryption": true,
+      "versioning": false,
+      "publicRead": false,
+      "createdAt": "2024-01-15T10:30:00Z",
+      "lastModified": "2024-03-20T14:45:00Z",
+      "objects": 1250
+    },
+    {
+      "id": "2",
+      "name": "backup-storage",
+      "region": "us-west-2",
+      "size": 15728640,
+      "storageClass": "GLACIER",
+      "encryption": true,
+      "versioning": true,
+      "publicRead": false,
+      "createdAt": "2024-02-10T09:15:00Z",
+      "lastModified": "2024-03-25T16:20:00Z",
+      "objects": 3200
+    },
+    {
+      "id": "3",
+      "name": "public-assets",
+      "region": "eu-west-1",
+      "size": 8388608,
+      "storageClass": "STANDARD",
+      "encryption": false,
+      "versioning": false,
+      "publicRead": true,
+      "createdAt": "2024-01-20T11:45:00Z",
+      "lastModified": "2024-03-22T13:30:00Z",
+      "objects": 850
+    }
+  ],
+  "newBucket": {
+    "name": "test-bucket-cypress",
+    "region": "us-east-1",
+    "storageClass": "STANDARD",
+    "encryption": true,
+    "versioning": false,
+    "publicRead": false
+  }
+}

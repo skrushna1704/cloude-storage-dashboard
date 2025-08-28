@@ -20,6 +20,7 @@ import {
 import { NavItem } from '../../../types/sidebar';
 import { navItems, quickItems } from '../../../constants/sidebarMockdata';
 import { SidebarProps } from '../../../types/sidebar';
+import { testIds } from '../../../shared/dataTestIds';
 
 export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onClose }) => {
   const location = useLocation();
@@ -132,6 +133,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onClose }) 
       display="flex"
       flexDirection="column"
       shadow="sm"
+      data-testid={testIds.sidebar}
     >
       {/* Main Navigation */}
       <Box flex="1" p={4} overflowY="auto">

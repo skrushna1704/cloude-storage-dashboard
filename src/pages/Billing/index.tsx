@@ -64,6 +64,7 @@ import {
 import { fetchBillingData } from '../../services/api/billing';
 import type { Invoice, PaymentMethod } from '../../services/api/billing';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
+import { testIds } from '../../shared/dataTestIds';
 
 
 
@@ -151,7 +152,7 @@ export const Billing: React.FC = () => {
   }
 
   return (
-    <Box>
+    <Box data-testid={testIds.billing_page}>
       {/* Header */}
       <VStack align="start" spacing={1} mb={8}>
         <Heading size={{ base: "lg", md: "xl" }} bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text">

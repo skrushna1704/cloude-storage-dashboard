@@ -42,6 +42,7 @@ import {
 } from '@chakra-ui/icons';
 import { HeaderProps } from '../../../types/header';
 import { notifications, mockBuckets } from '../../../constants/mockdata';
+import { testIds } from '../../../shared/dataTestIds';
 
 export const Header: React.FC<HeaderProps> = ({
   sidebarCollapsed = false,
@@ -110,6 +111,7 @@ export const Header: React.FC<HeaderProps> = ({
                       transform: 'scale(1.05)',
                     }}
                     transition="all 0.2s"
+                    data-testid={testIds.mobile_menu_btn}
                   />
                 </Tooltip>
               )}
@@ -124,6 +126,7 @@ export const Header: React.FC<HeaderProps> = ({
                   alignItems="center"
                   justifyContent="center"
                   shadow="md"
+                  data-testid={testIds.app_logo}
                 >
                   <ViewIcon color="white" boxSize={5} />
                 </Box>
@@ -133,6 +136,7 @@ export const Header: React.FC<HeaderProps> = ({
                   fontWeight="700"
                   bgGradient="linear(to-r, #667eea, #764ba2)"
                   bgClip="text"
+                  data-testid={testIds.app_title}
                 >
                   CloudSync Pro
                 </Heading>
@@ -158,6 +162,7 @@ export const Header: React.FC<HeaderProps> = ({
                     borderColor: searchHoverBorderColor,
                   }}
                   transition="all 0.2s"
+                  data-testid={testIds.search_input}
                 />
                 <InputRightElement>
                   <IconButton
@@ -169,6 +174,7 @@ export const Header: React.FC<HeaderProps> = ({
                     _hover={{
                       bg: searchButtonHoverBg,
                     }}
+                    data-testid={testIds.search_button}
                   />
                 </InputRightElement>
               </InputGroup>
@@ -231,6 +237,7 @@ export const Header: React.FC<HeaderProps> = ({
                       transform: 'scale(1.05)',
                     }}
                     transition="all 0.2s"
+                    data-testid={testIds.notification_bell}
                   />
                 </Tooltip>
                 {unreadCount > 0 && (
@@ -248,6 +255,7 @@ export const Header: React.FC<HeaderProps> = ({
                     justifyContent="center"
                     fontSize="xs"
                     fontWeight="bold"
+                    data-testid={testIds.notification_count}
                   >
                     {unreadCount}
                   </Badge>
@@ -268,8 +276,9 @@ export const Header: React.FC<HeaderProps> = ({
                     bg: userButtonActiveBg,
                   }}
                   transition="all 0.2s"
+                  data-testid={testIds.user_menu}
                 >
-                  <Text fontSize="sm" fontWeight="medium">
+                  <Text fontSize="sm" fontWeight="medium" data-testid={testIds.user_name}>
                     John Doe
                   </Text>
                 </MenuButton>

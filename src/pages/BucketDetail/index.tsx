@@ -326,7 +326,7 @@ export const BucketDetail: React.FC = () => {
       {/* Breadcrumb Navigation */}
       <Breadcrumb spacing={2} separator={<ChevronRightIcon color="gray.500" />} mb={6}>
         <BreadcrumbItem>
-          <BreadcrumbLink as={Link} to={ROUTES.BUCKETS} color="gray.500" fontSize="sm">
+          <BreadcrumbLink as={Link} to={ROUTES.BUCKETS} color="gray.500" fontSize="sm" data-test='bucket_breadcrumb'>
             Buckets
           </BreadcrumbLink>
         </BreadcrumbItem>
@@ -355,10 +355,10 @@ export const BucketDetail: React.FC = () => {
         </VStack>
         
         <HStack spacing={3}>
-          <Button leftIcon={<ViewIcon />} variant="outline" size={{ base: "sm", md: "md" }} onClick={() => navigate(`/analytics/bucket/${bucketId}`)}>
+          <Button leftIcon={<ViewIcon />} variant="outline" size={{ base: "sm", md: "md" }} onClick={() => navigate(`/analytics/bucket/${bucketId}`)} data-test='bucket_details_monitor_btn'>
             Monitor
           </Button>
-          <Button leftIcon={<SettingsIcon />} variant="outline" size={{ base: "sm", md: "md" }} onClick={handleEditProperties}>
+          <Button leftIcon={<SettingsIcon />} variant="outline" size={{ base: "sm", md: "md" }} onClick={handleEditProperties} data-test='bucket_details_configure_btn'>
             Configure
           </Button>
           <Menu>
@@ -427,7 +427,7 @@ export const BucketDetail: React.FC = () => {
       {/* Security & Configuration */}
       <Card bg={cardBg} shadow="md" borderRadius="xl" mb={8}>
         <CardBody>
-          <Heading size="md" mb={6}>Security & Configuration</Heading>
+          <Heading size="md" mb={6} data-test='bucket_details_security_heading'>Security & Configuration</Heading>
           <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
             <VStack align="start" spacing={2}>
               <HStack>
@@ -477,10 +477,10 @@ export const BucketDetail: React.FC = () => {
           <Flex justify="space-between" align="center" mb={6} direction={{ base: "column", md: "row" }} gap={4}>
             <Heading size="md">Objects</Heading>
             <HStack spacing={3}>
-              <Button leftIcon={<ViewIcon />} size={{ base: "sm", md: "sm" }} variant="outline" onClick={handleUploadFiles}>
+              <Button leftIcon={<ViewIcon />} size={{ base: "sm", md: "sm" }} variant="outline" onClick={handleUploadFiles} data-test='bucket_details_upload_files_btn'>
                 Upload Files
               </Button>
-              <Button leftIcon={<ViewIcon />} size={{ base: "sm", md: "sm" }} variant="outline" onClick={handleCreateFolder}>
+              <Button leftIcon={<ViewIcon />} size={{ base: "sm", md: "sm" }} variant="outline" onClick={handleCreateFolder} data-test='bucket_details_create_folder_btn'>
                 Create Folder
               </Button>
             </HStack>

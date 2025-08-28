@@ -180,7 +180,7 @@ export const FileUploadModal: React.FC<FileUploadModalProps> = ({
         <ModalHeader>
           <HStack>
             <Icon as={DownloadIcon} color="blue.500" />
-            <Text>Upload Files</Text>
+            <Text data-test='upload_folder_model_text'>Upload Files</Text>
           </HStack>
         </ModalHeader>
         

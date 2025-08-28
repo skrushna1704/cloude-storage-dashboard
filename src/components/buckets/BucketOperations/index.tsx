@@ -32,6 +32,7 @@ import {
   RepeatIcon,
   ChevronDownIcon,
 } from '@chakra-ui/icons';
+import { testIds } from '../../../shared/dataTestIds';
 
 interface BucketOperationsProps {
   selectedBuckets?: string[];
@@ -158,6 +159,7 @@ export const BucketOperations: React.FC<BucketOperationsProps> = ({
                 boxShadow: 'lg',
               }}
               transition="all 0.2s"
+              data-test={testIds.create_bucket_btns}
             >
               Create Bucket
             </Button>

@@ -9,6 +9,7 @@ import {
 import { BucketList } from '../../components/buckets/BucketList';
 import { BucketOperations } from '../../components/buckets/BucketOperations';
 import { CreateBucketModal } from '../../components/buckets/CreateBucketModal';
+import { testIds } from '../../shared/dataTestIds';
 import { RenameBucketModal } from '../../components/buckets/RenameBucketModal';
 import { Bucket } from '../../types/bucket';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
@@ -262,13 +263,13 @@ export const Buckets: React.FC = () => {
   };
 
   return (
-    <Box>
+    <Box data-testid={testIds.buckets_page}>
       {/* Header Section */}
       <VStack align="start" spacing={1} mb={8}>
-        <Heading size={{ base: "lg", md: "xl" }} bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text">
+        <Heading size={{ base: "lg", md: "xl" }} bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text" data-testid={testIds.buckets_page_titles}>
           Storage Buckets
         </Heading>
-        <Text color="gray.600" fontSize={{ base: "md", md: "lg" }}>
+        <Text color="gray.600" fontSize={{ base: "md", md: "lg" }} data-testid={testIds.buckets_page_desccription}>
           Manage your cloud storage buckets and data
         </Text>
       </VStack>

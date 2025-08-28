@@ -42,6 +42,7 @@ import {
   ChevronUpIcon,
   ArrowUpIcon,
 } from '@chakra-ui/icons';
+import { testIds } from '../../shared/dataTestIds';
 
 export const Analytics: React.FC = () => {
   const cardBg = useColorModeValue('white', 'gray.700');
@@ -111,7 +112,7 @@ export const Analytics: React.FC = () => {
   };
 
   return (
-    <Box>
+    <Box data-testid={testIds.analytics_page}>
       {/* Header */}
       <Flex justify="space-between" align="center" mb={8} direction={{ base: "column", md: "row" }} gap={4}>
         <VStack align="start" spacing={1}>
@@ -125,7 +126,7 @@ export const Analytics: React.FC = () => {
         
         <HStack spacing={3}>
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline" size={{ base: "sm", md: "md" }}>
+            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline" size={{ base: "sm", md: "md" }} data-testid={testIds.analytics_period_selector}>
               Last 30 Days
             </MenuButton>
             <MenuList>
@@ -135,7 +136,7 @@ export const Analytics: React.FC = () => {
               <MenuItem>Last Year</MenuItem>
             </MenuList>
           </Menu>
-          <Button leftIcon={<DownloadIcon />} variant="outline" size={{ base: "sm", md: "md" }}>
+          <Button leftIcon={<DownloadIcon />} variant="outline" size={{ base: "sm", md: "md" }} data-testid={testIds.export_report_btn}>
             Export Report
           </Button>
         </HStack>

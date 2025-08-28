@@ -1,0 +1,62 @@
+{
+  "analytics": {
+    "totalStorage": 89543417856,
+    "storageLimit": 107374182400,
+    "monthlyCost": 124.67,
+    "monthlyCostChange": 26.7,
+    "storageUsage": 83.4,
+    "storageUsageChange": 12.3,
+    "dataTransfer": 45.2,
+    "dataTransferChange": -5.1,
+    "requests": 1250000,
+    "requestsChange": 8.9,
+    "alerts": [
+      {
+        "type": "warning",
+        "severity": "medium",
+        "message": "Storage usage is at 83% of limit",
+        "timestamp": "2024-03-25T10:30:00Z"
+      },
+      {
+        "type": "info",
+        "severity": "low",
+        "message": "Monthly costs increased by 12.3%",
+        "timestamp": "2024-03-24T15:45:00Z"
+      },
+      {
+        "type": "success",
+        "severity": "low",
+        "message": "All backups completed successfully",
+        "timestamp": "2024-03-23T09:20:00Z"
+      }
+    ],
+    "usageTrends": [
+      { "date": "2024-03-01", "storage": 75.2, "cost": 98.45 },
+      { "date": "2024-03-02", "storage": 76.1, "cost": 99.12 },
+      { "date": "2024-03-03", "storage": 77.8, "cost": 101.23 },
+      { "date": "2024-03-04", "storage": 78.5, "cost": 102.67 },
+      { "date": "2024-03-05", "storage": 79.2, "cost": 104.89 },
+      { "date": "2024-03-06", "storage": 80.1, "cost": 106.34 },
+      { "date": "2024-03-07", "storage": 81.3, "cost": 108.56 },
+      { "date": "2024-03-08", "storage": 82.7, "cost": 110.78 },
+      { "date": "2024-03-09", "storage": 83.4, "cost": 112.45 },
+      { "date": "2024-03-10", "storage": 84.1, "cost": 114.67 },
+      { "date": "2024-03-11", "storage": 85.2, "cost": 116.89 },
+      { "date": "2024-03-12", "storage": 86.5, "cost": 118.34 },
+      { "date": "2024-03-13", "storage": 87.1, "cost": 120.56 },
+      { "date": "2024-03-14", "storage": 88.3, "cost": 122.78 },
+      { "date": "2024-03-15", "storage": 89.7, "cost": 124.67 }
+    ],
+    "bucketUsage": [
+      { "name": "my-bucket-1", "size": 3145728, "percentage": 35 },
+      { "name": "backup-storage", "size": 15728640, "percentage": 45 },
+      { "name": "public-assets", "size": 8388608, "percentage": 20 }
+    ],
+    "storageByType": [
+      { "type": "Images", "size": 45.2, "percentage": 35 },
+      { "type": "Documents", "size": 28.7, "percentage": 22 },
+      { "type": "Videos", "size": 32.1, "percentage": 25 },
+      { "type": "Backups", "size": 18.4, "percentage": 18 }
+    ]
+  }
+}

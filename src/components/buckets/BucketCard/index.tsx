@@ -21,6 +21,7 @@ import {
   ExternalLinkIcon,
 } from '@chakra-ui/icons';
 import { generateBucketDetailPath } from '../../../constants/routes';
+import { testIds } from '../../../shared/dataTestIds';
 
 interface BucketCardProps {
   bucket: {
@@ -100,6 +101,7 @@ export const BucketCard: React.FC<BucketCardProps> = ({
 
   return (
     <Card
+      data-test={'bucket_card'}
       as={Link}
       to={generateBucketDetailPath(bucket.id)}
       bg={cardBg}
@@ -133,6 +135,7 @@ export const BucketCard: React.FC<BucketCardProps> = ({
         bg="linear-gradient(90deg, transparent, #667eea, transparent)"
         transition="left 0.5s ease"
         _groupHover={{ left: '100%' }}
+        data-test='bucket-box'
       />
 
       <CardHeader pb={2}>
@@ -146,6 +149,7 @@ export const BucketCard: React.FC<BucketCardProps> = ({
               noOfLines={1}
               _dark={{ color: 'white' }}
               marginTop={"20px"}
+              data-test={'bucket_card_name'}
             >
               {bucket.name}
             </Text>

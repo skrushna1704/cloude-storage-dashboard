@@ -2,6 +2,7 @@ import React, { ReactNode, useState } from 'react';
 import { Box, Flex, useBreakpointValue } from '@chakra-ui/react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
+import { testIds } from '../../../shared/dataTestIds';
 
 interface LayoutProps {
   children: ReactNode;
@@ -31,11 +32,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         sidebarCollapsed={sidebarCollapsed}
         onSidebarToggle={handleSidebarToggle}
         mobileSidebarOpen={mobileSidebarOpen}
+        data-testid={testIds.header}
       />
       <Flex>
         {/* Desktop Sidebar */}
         <Box display={{ base: 'none', md: 'block' }}>
-          <Sidebar collapsed={sidebarCollapsed} />
+          <Sidebar collapsed={sidebarCollapsed} data-testid={testIds.sidebar} />
         </Box>
         
         {/* Mobile Sidebar Overlay */}
@@ -67,6 +69,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           transform={mobileSidebarOpen ? 'translateX(0)' : 'translateX(-100%)'}
           transition="transform 0.3s ease"
           display={{ base: 'block', md: 'none' }}
+          data-testid={testIds.mobile_sidebar}
         >
           <Sidebar collapsed={false} onClose={handleMobileSidebarClose} />
         </Box>
@@ -76,6 +79,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           ml={0}
           transition="margin-left 0.3s ease"
           minHeight="calc(100vh - 73px)"
+          data-testid={testIds.main_content}
         >
           <Box
             bg="rgba(255, 255, 255, 0.95)"

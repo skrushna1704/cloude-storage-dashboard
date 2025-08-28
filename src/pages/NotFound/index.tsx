@@ -11,6 +11,7 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { ArrowBackIcon, ViewIcon } from '@chakra-ui/icons';
+import { testIds } from '../../shared/dataTestIds';
 
 export const NotFound: React.FC = () => {
   const bgColor = useColorModeValue('white', 'gray.800');
@@ -26,6 +27,7 @@ export const NotFound: React.FC = () => {
         shadow="xl"
         border="1px solid"
         borderColor={useColorModeValue('gray.200', 'gray.600')}
+        data-testid={testIds.not_found_page}
       >
         <VStack spacing={6}>
           {/* 404 Icon */}
