@@ -13,30 +13,30 @@ const mockBuckets: Array<{
 }> = [
   {
     id: '1',
-    name: 'my-bucket-1',
+    name: 'my-bucket',
     region: 'us-east-1',
-    size: 25600, // 25 TB in GB
-    objectCount: 1250000,
+    size: 0,
+    objectCount: 0,
     status: 'active',
     createdAt: '2024-01-15T00:00:00Z',
   },
   {
     id: '2',
-    name: 'my-bucket-2',
-    region: 'us-west-2',
-    size: 40200, // 40.2 TB in GB
-    objectCount: 2100000,
-    status: 'active',
-    createdAt: '2024-02-20T00:00:00Z',
-  },
-  {
-    id: '3',
     name: 'backup-bucket',
     region: 'eu-west-1',
     size: 15800, // 15.8 TB in GB
     objectCount: 856000,
     status: 'active',
-    createdAt: '2024-03-10T00:00:00Z',
+    createdAt: '2024-02-20T00:00:00Z',
+  },
+  {
+    id: '1756437751172',
+    name: 'krushna-bucket',
+    region: 'us-east-1',
+    size: 0,
+    objectCount: 0,
+    status: 'active',
+    createdAt: new Date().toISOString(),
   },
 ];
 
@@ -93,6 +93,39 @@ const mockObjects: Record<string, Array<{
       lastModified: '2024-03-12T14:15:00Z',
       contentType: 'image/png',
       etag: 'def456',
+      storageClass: 'STANDARD',
+      metadata: {},
+    },
+    {
+      key: '/config.json',
+      name: 'config.json',
+      size: 1024 * 2, // 2KB
+      isFolder: false,
+      lastModified: '2024-03-10T12:00:00Z',
+      contentType: 'application/json',
+      etag: 'config123',
+      storageClass: 'STANDARD',
+      metadata: {},
+    },
+    {
+      key: '/backup.zip',
+      name: 'backup.zip',
+      size: 1024 * 1024 * 150, // 150MB
+      isFolder: false,
+      lastModified: '2024-03-09T18:30:00Z',
+      contentType: 'application/zip',
+      etag: 'backup456',
+      storageClass: 'STANDARD-IA',
+      metadata: {},
+    },
+    {
+      key: '/logs.txt',
+      name: 'logs.txt',
+      size: 1024 * 4, // 4KB
+      isFolder: false,
+      lastModified: '2024-03-08T10:15:00Z',
+      contentType: 'text/plain',
+      etag: 'logs789',
       storageClass: 'STANDARD',
       metadata: {},
     },
@@ -233,6 +266,7 @@ export const handlers = [
     const { id } = params;
     console.log('MSW: Attempting to delete bucket with ID:', id);
     console.log('MSW: Available bucket IDs:', mockBuckets.map(b => b.id));
+    console.log('MSW: Available bucket names:', mockBuckets.map(b => b.name));
     
     const index = mockBuckets.findIndex(bucket => bucket.id === id);
     if (index !== -1) {
@@ -242,7 +276,19 @@ export const handlers = [
     }
     
     console.log('MSW: Bucket not found with ID:', id);
-    return new HttpResponse(null, { status: 404 });
+    return new HttpResponse(
+      JSON.stringify({ 
+        error: 'Bucket not found', 
+        message: `Bucket with ID ${id} does not exist`,
+        availableIds: mockBuckets.map(b => b.id)
+      }), 
+      { 
+        status: 404,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
   }),
 
   // Objects API
@@ -291,6 +337,88 @@ export const handlers = [
       if (index !== -1) {
         objects.splice(index, 1);
         return new HttpResponse(null, { status: 204 });
+      }
+    }
+    return new HttpResponse(null, { status: 404 });
+  }),
+
+  http.get('/api/buckets/:bucketId/objects/:key/download', ({ params }) => {
+    const { bucketId, key } = params;
+    console.log('MSW: Download request for bucket:', bucketId, 'key:', key);
+    
+    const objects = mockObjects[bucketId as string];
+    if (!objects) {
+      console.log('MSW: Bucket not found:', bucketId);
+      return new HttpResponse(
+        JSON.stringify({ error: 'Bucket not found', message: `Bucket ${bucketId} does not exist` }),
+        { 
+          status: 404,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+    
+    const object = objects.find(obj => obj.key === key);
+    if (!object) {
+      console.log('MSW: Object not found:', key, 'Available keys:', objects.map(obj => obj.key));
+      return new HttpResponse(
+        JSON.stringify({ 
+          error: 'Object not found', 
+          message: `Object ${key} does not exist in bucket ${bucketId}`,
+          availableKeys: objects.map(obj => obj.key)
+        }),
+        { 
+          status: 404,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+    
+    if (object.isFolder) {
+      console.log('MSW: Cannot download folder:', key);
+      return new HttpResponse(
+        JSON.stringify({ error: 'Cannot download folder', message: `Cannot download folder ${key}` }),
+        { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+    }
+    
+    // Create a mock file blob for download
+    const mockContent = `This is a mock file content for ${object.name}`;
+    const blob = new Blob([mockContent], { type: object.contentType || 'application/octet-stream' });
+    
+    console.log('MSW: Successfully created download for:', object.name);
+    return new HttpResponse(blob, {
+      status: 200,
+      headers: {
+        'Content-Type': object.contentType || 'application/octet-stream',
+        'Content-Disposition': `attachment; filename="${object.name}"`,
+      },
+    });
+  }),
+
+  http.post('/api/buckets/:bucketId/objects/download', async ({ params, request }) => {
+    const { bucketId } = params;
+    const body = await request.json() as { keys: string[] };
+    const objects = mockObjects[bucketId as string];
+    
+    if (objects && body.keys.length > 0) {
+      const selectedObjects = objects.filter(obj => body.keys.includes(obj.key) && !obj.isFolder);
+      
+      if (selectedObjects.length > 0) {
+        // Create a mock zip file content for multiple files
+        const mockZipContent = `Mock ZIP file containing: ${selectedObjects.map(obj => obj.name).join(', ')}`;
+        const blob = new Blob([mockZipContent], { type: 'application/zip' });
+        
+        return new HttpResponse(blob, {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/zip',
+            'Content-Disposition': `attachment; filename="download-${Date.now()}.zip"`,
+          },
+        });
       }
     }
     return new HttpResponse(null, { status: 404 });
@@ -441,3 +569,4 @@ export const handlers = [
     });
   }),
 ];
+

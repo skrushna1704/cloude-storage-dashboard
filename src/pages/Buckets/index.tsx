@@ -108,10 +108,10 @@ export const Buckets: React.FC = () => {
       const newReduxBucket = convertAPIBucketToReduxBucket(newAPIBucket);
       dispatch(createBucketAction(newReduxBucket));
       
-      dispatch(showSuccessNotification({
-        title: 'Bucket Created',
-        message: `Bucket "${bucketData.name}" created successfully`
-      }));
+      // dispatch(showSuccessNotification({
+      //   title: 'Bucket Created',
+      //   message: `Bucket "${bucketData.name}" created successfully`
+      // }));
       
       onCreateClose();
     } catch (error) {
@@ -132,10 +132,10 @@ export const Buckets: React.FC = () => {
       // Remove from Redux store
       dispatch(deleteBuckets([bucketId]));
       
-      dispatch(showSuccessNotification({
-        title: 'Bucket Deleted',
-        message: `Bucket "${bucketName}" deleted successfully`
-      }));
+      // dispatch(showSuccessNotification({
+      //   title: 'Bucket Deleted',
+      //   message: `Bucket "${bucketName}" deleted successfully`
+      // }));
     } catch (error) {
       console.error('Delete bucket error:', error);
       dispatch(showErrorNotification({
@@ -158,10 +158,10 @@ export const Buckets: React.FC = () => {
         message: `${bucketIds.length} bucket(s) deleted successfully`
       }));
     } catch (error) {
-      dispatch(showErrorNotification({
-        title: 'Error',
-        message: 'Failed to delete buckets'
-      }));
+      // dispatch(showErrorNotification({
+      //   title: 'Error',
+      //   message: 'Failed to delete buckets'
+      // }));
     }
   };
 

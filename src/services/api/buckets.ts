@@ -39,11 +39,20 @@ export const createBucket = async (bucketData: CreateBucketRequest): Promise<Buc
 };
 
 export const deleteBucket = async (bucketId: string): Promise<void> => {
+  console.log('API: Deleting bucket with ID:', bucketId);
+  console.log('API: Request URL:', `${API_BASE_URL}/buckets/${bucketId}`);
+  
   const response = await fetch(`${API_BASE_URL}/buckets/${bucketId}`, {
     method: 'DELETE',
   });
   
+  console.log('API: Delete response status:', response.status);
+  
   if (!response.ok) {
-    throw new Error('Failed to delete bucket');
+    const errorText = await response.text();
+    console.error('API: Delete failed with status:', response.status, 'Error:', errorText);
+    throw new Error(`Failed to delete bucket: ${response.status} ${errorText}`);
   }
+  
+  console.log('API: Bucket deleted successfully');
 };

@@ -69,6 +69,8 @@ import { CreateFolderModal } from '../../components/objects/FileOperations/Creat
 import { FileObject } from '../../types/bucket';
 import { filesMockdata } from '../../constants/mockdata';
 import { formatSize, formatStorageSize, getStorageClassColor, FileIcon } from '../../utils/bucket-utils';
+import { downloadObject } from '../../services/api/objects';
+import { downloadFile} from '../../utils/downloadUtils';
 
 
 export const BucketDetail: React.FC = () => {
@@ -242,10 +244,33 @@ export const BucketDetail: React.FC = () => {
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [selectedFileToDownload, setSelectedFileToDownload] = useState<FileObject | null>(null);
 
-  const handleDownloadFile = (file: FileObject) => {
-    setSelectedFileToDownload(file);
-    setIsDownloadModalOpen(true);
+  const handleDownloadFile = async (file: FileObject) => {
+    if (file.type === 'folder') {
+      toast({
+        title: 'Cannot Download Folder',
+        description: 'Folders cannot be downloaded directly. Please select individual files.',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      setSelectedFileToDownload(file);
+      setIsDownloadModalOpen(true);
+    } catch (error) {
+      console.error('Error preparing download:', error);
+      toast({
+        title: 'Download Error',
+        description: 'Failed to prepare download.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
+
 
   const handleCloseDownloadModal = () => {
     setIsDownloadModalOpen(false);
@@ -743,17 +768,47 @@ export const BucketDetail: React.FC = () => {
             </AlertDialogBody>
             <AlertDialogFooter>
               <Button onClick={handleCloseDownloadModal}>Cancel</Button>
-              <Button colorScheme="blue" onClick={() => {
-                // TODO: Implement actual download logic
-                toast({
-                  title: `Downloading "${selectedFileToDownload?.name}"...`,
-                  description: "This feature is under development.",
-                  status: "info",
-                  duration: 5000,
-                  isClosable: true,
-                });
-                handleCloseDownloadModal();
-              }} ml={3}>
+              <Button 
+                colorScheme="blue" 
+                onClick={async () => {
+                  if (!selectedFileToDownload || !bucketId) {
+                    handleCloseDownloadModal();
+                    return;
+                  }
+
+                  try {
+                    // toast({
+                    //   title: `Downloading "${selectedFileToDownload.name}"...`,
+                    //   description: "Please wait while we prepare your download.",
+                    //   status: "info",
+                    //   duration: 3000,
+                    //   isClosable: true,
+                    // });
+
+                    const blob = await downloadObject(bucketId, selectedFileToDownload.path, selectedFileToDownload.name);
+                    downloadFile(blob, selectedFileToDownload.name);
+
+                    toast({
+                      title: 'Download Complete',
+                      description: `"${selectedFileToDownload.name}" has been downloaded successfully.`,
+                      status: "success",
+                      duration: 3000,
+                      isClosable: true,
+                    });
+                  } catch (error) {
+                    console.error('Download error:', error);
+                    toast({
+                      title: 'Download Failed',
+                      description: 'Failed to download the file. Please try again.',
+                      status: "error",
+                      duration: 3000,
+                      isClosable: true,
+                    });
+                  }
+                  handleCloseDownloadModal();
+                }} 
+                ml={3}
+              >
                 Download
               </Button>
             </AlertDialogFooter>

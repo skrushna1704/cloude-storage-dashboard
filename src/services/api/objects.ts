@@ -54,6 +54,32 @@ export const deleteObject = async (bucketId: string, key: string): Promise<void>
   }
 };
 
+export const downloadObject = async (bucketId: string, key: string, filename?: string): Promise<Blob> => {
+  const response = await fetch(`${API_BASE_URL}/buckets/${bucketId}/objects/${encodeURIComponent(key)}/download`);
+  
+  if (!response.ok) {
+    throw new Error('Failed to download object');
+  }
+  
+  return response.blob();
+};
+
+export const downloadObjects = async (bucketId: string, keys: string[]): Promise<Blob> => {
+  const response = await fetch(`${API_BASE_URL}/buckets/${bucketId}/objects/download`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ keys }),
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to download objects');
+  }
+  
+  return response.blob();
+};
+
 export const uploadFile = async (bucketId: string, file: File, key?: string): Promise<{ success: boolean; object: ObjectMetadata }> => {
   const formData = new FormData();
   formData.append('file', file);
