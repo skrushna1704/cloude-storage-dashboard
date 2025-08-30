@@ -1,0 +1,5 @@
+# Handle client-side routing
+/*    /index.html   200
+
+# API routes - redirect to index.html for MSW to handle
+/api/*    /index.html   200

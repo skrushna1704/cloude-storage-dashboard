@@ -88,7 +88,7 @@ export const Header: React.FC<HeaderProps> = ({
         as="header"
         position="sticky"
         top={0}
-        zIndex="sticky"
+        zIndex={999}
         bg={bgColor}
         backdropFilter="blur(20px)"
         borderBottom="1px solid"
@@ -96,18 +96,18 @@ export const Header: React.FC<HeaderProps> = ({
         shadow="sm"
       >
         {/* Main Header Row */}
-        <Box px={6} py={4}>
-          <Flex align="center" justify="space-between">
+        <Box px={{ base: 4, md: 6 }} py={4}>
+          <Flex align="center" justify="space-between" direction={{ base: "row", md: "row" }}>
             {/* Left Section */}
             <Flex align="center" gap={4}>
               {onSidebarToggle && (
-                <Tooltip label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
+                <Tooltip label={sidebarCollapsed ? 'Expand sidebar' : ''}>
                   <IconButton
                     icon={<HamburgerIcon />}
                     onClick={onSidebarToggle}
                     variant="ghost"
                     size="md"
-                    aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                    aria-label={sidebarCollapsed ? 'Expand sidebar' : ''}
                     _hover={{
                       bg: notificationButtonHoverBg,
                       transform: 'scale(1.05)',
@@ -148,7 +148,7 @@ export const Header: React.FC<HeaderProps> = ({
             </Flex>
 
             {/* Center Section - Search */}
-            <Box flex="1" maxW="500px" mx={8}>
+            <Box flex="1" maxW={{ base: "300px", md: "500px" }} mx={{ base: 4, md: 8 }} display={{ base: "none", md: "block" }}>
               <InputGroup>
                 <Input
                   placeholder={'Search files, buckets, folders...'}

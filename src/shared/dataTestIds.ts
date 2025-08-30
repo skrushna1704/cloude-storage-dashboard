@@ -1,6 +1,6 @@
 const testIds = {
   // Base URLs
-  url_base: process.env.CYPRESS_BASE_URL || 'http://localhost:3000',
+  url_base: process.env.CYPRESS_BASE_URL || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000'),
   url_buckets: '/buckets',
   url_analytics: '/analytics',
   url_billing: '/billing',

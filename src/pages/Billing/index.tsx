@@ -155,27 +155,27 @@ export const Billing: React.FC = () => {
     <Box data-test={'billing_page'}>
       {/* Header */}
       <VStack align="start" spacing={1} mb={8}>
-        <Heading size={{ base: "lg", md: "xl" }} bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text" data-test={'billing_header'}>
+        <Heading size={{ base: "lg", md: "2xl" }} bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text" data-test={'billing_header'}>
           Billing & Payments
         </Heading>
-        <Text color="gray.600" fontSize={{ base: "md", md: "lg" }} data-test={'billing_description'}>
+        <Text color="gray.600" fontSize={{ base: "sm", md: "lg" }} data-test={'billing_description'}>
           Manage your billing information, view invoices, and track payments
         </Text>
       </VStack>
 
       {/* Billing Overview Cards */}
-      <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing={6} mb={8} data-test={'billing_cards'}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mb={8} data-test={'billing_cards'}>
         <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="green.500" data-test={'current_month_card'}>
           <CardBody>
             <Stat>
-              <StatLabel fontSize="sm" color="gray.500" mb={1} data-test={'current_month_label'}>Current Month</StatLabel>
-              <StatNumber fontSize="2xl" color="green.500" mb={2} data-test={'current_month_value'}>
-                ${billingData.currentMonth}
-              </StatNumber>
-              <StatHelpText fontSize="xs" data-test={'current_month_trend'}>
-                <StatArrow type={billingData.trend > 0 ? 'increase' : 'decrease'} />
-                {Math.abs(billingData.trend)}% from last month
-              </StatHelpText>
+                          <StatLabel fontSize={{ base: "xs", md: "sm" }} color="gray.500" mb={1} data-test={'current_month_label'}>Current Month</StatLabel>
+            <StatNumber fontSize={{ base: "xl", md: "2xl" }} color="green.500" mb={2} data-test={'current_month_value'}>
+              ${billingData.currentMonth}
+            </StatNumber>
+            <StatHelpText fontSize={{ base: "2xs", md: "xs" }} data-test={'current_month_trend'}>
+              <StatArrow type={billingData.trend > 0 ? 'increase' : 'decrease'} />
+              {Math.abs(billingData.trend)}% from last month
+            </StatHelpText>
             </Stat>
           </CardBody>
         </Card>
@@ -205,13 +205,13 @@ export const Billing: React.FC = () => {
         <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="orange.500" data-test={'upcoming_payment_card'}>
           <CardBody>
             <Stat>
-              <StatLabel fontSize="sm" color="gray.500" mb={1} data-test={'upcoming_payment_label'}>Upcoming Payment</StatLabel>
-              <StatNumber fontSize="2xl" color="orange.500" mb={2} data-test={'upcoming_payment_value'}>
-                ${billingData.upcomingPayment}
-              </StatNumber>
-              <StatHelpText fontSize="xs" data-test={'upcoming_payment_due_date'}>
-                Due: {new Date(billingData.dueDate).toLocaleDateString()}
-              </StatHelpText>
+                          <StatLabel fontSize={{ base: "xs", md: "sm" }} color="gray.500" mb={1} data-test={'upcoming_payment_label'}>Upcoming Payment</StatLabel>
+            <StatNumber fontSize={{ base: "xl", md: "2xl" }} color="orange.500" mb={2} data-test={'upcoming_payment_value'}>
+              ${billingData.upcomingPayment}
+            </StatNumber>
+            <StatHelpText fontSize={{ base: "2xs", md: "xs" }} data-test={'upcoming_payment_due_date'}>
+              Due: {new Date(billingData.dueDate).toLocaleDateString()}
+            </StatHelpText>
             </Stat>
           </CardBody>
         </Card>
@@ -219,13 +219,13 @@ export const Billing: React.FC = () => {
         <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="purple.500" data-test={'payment_methods_count_card'}>
           <CardBody>
             <Stat>
-              <StatLabel fontSize="sm" color="gray.500" mb={1} data-test={'payment_methods_label'}>Payment Methods</StatLabel>
-              <StatNumber fontSize="2xl" color="purple.500" mb={2} data-test={'payment_methods_count'}>
-                {paymentMethods.length}
-              </StatNumber>
-              <StatHelpText fontSize="xs" data-test={'payment_methods_default_count'}>
-                {paymentMethods.filter(pm => pm.isDefault).length} default
-              </StatHelpText>
+                          <StatLabel fontSize={{ base: "xs", md: "sm" }} color="gray.500" mb={1} data-test={'payment_methods_label'}>Payment Methods</StatLabel>
+            <StatNumber fontSize={{ base: "xl", md: "2xl" }} color="purple.500" mb={2} data-test={'payment_methods_count'}>
+              {paymentMethods.length}
+            </StatNumber>
+            <StatHelpText fontSize={{ base: "2xs", md: "xs" }} data-test={'payment_methods_default_count'}>
+              {paymentMethods.filter(pm => pm.isDefault).length} default
+            </StatHelpText>
             </Stat>
           </CardBody>
         </Card>
@@ -244,14 +244,14 @@ export const Billing: React.FC = () => {
           <TabPanel data-test={'invoices_panel'}>
             <Card bg={cardBg} shadow="md" borderRadius="xl" data-test={'invoices_card'}>
               <CardHeader>
-                <Flex justify="space-between" align="center">
+                <Flex justify="space-between" align="center" direction={{ base: "column", md: "row" }} gap={4}>
                   <Heading size="md" data-test={'invoices_header'}>Invoices</Heading>
-                  <HStack>
+                  <HStack spacing={3} flexWrap={{ base: "wrap", md: "nowrap" }}>
                     <Select
                       size="sm"
                       value={selectedPeriod}
                       onChange={(e) => setSelectedPeriod(e.target.value)}
-                      width="150px"
+                      width={{ base: "full", md: "150px" }}
                       data-test={'invoice_period_filter'}
                     >
                       <option value="current">Current Month</option>
@@ -270,19 +270,19 @@ export const Billing: React.FC = () => {
                   <Table variant="simple" size="md" data-test={'invoices_table'}>
                     <Thead>
                       <Tr>
-                        <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs">
+                        <Th border="none" color="gray.500" fontWeight="semibold" fontSize={{ base: "2xs", md: "xs" }}>
                           INVOICE
                         </Th>
-                        <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs">
+                        <Th border="none" color="gray.500" fontWeight="semibold" fontSize={{ base: "2xs", md: "xs" }} display={{ base: "none", md: "table-cell" }}>
                           DATE
                         </Th>
-                        <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs">
+                        <Th border="none" color="gray.500" fontWeight="semibold" fontSize={{ base: "2xs", md: "xs" }}>
                           AMOUNT
                         </Th>
-                        <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs">
+                        <Th border="none" color="gray.500" fontWeight="semibold" fontSize={{ base: "2xs", md: "xs" }}>
                           STATUS
                         </Th>
-                        <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs">
+                        <Th border="none" color="gray.500" fontWeight="semibold" fontSize={{ base: "2xs", md: "xs" }}>
                           ACTIONS
                         </Th>
                       </Tr>
@@ -292,12 +292,12 @@ export const Billing: React.FC = () => {
                         <Tr key={invoice.id} _hover={{ bg: hoverBg }} data-test={`invoice_row_${invoice.id}`}>
                           <Td border="none" py={4}>
                             <VStack align="start" spacing={1}>
-                              <Text fontWeight="medium" data-test={`invoice_number_${invoice.id}`}>{invoice.invoiceNumber}</Text>
-                              <Text fontSize="sm" color="gray.600" data-test={`invoice_description_${invoice.id}`}>{invoice.description}</Text>
+                              <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }} data-test={`invoice_number_${invoice.id}`}>{invoice.invoiceNumber}</Text>
+                              <Text fontSize={{ base: "xs", md: "sm" }} color="gray.600" data-test={`invoice_description_${invoice.id}`}>{invoice.description}</Text>
                             </VStack>
                           </Td>
-                          <Td border="none" py={4}>
-                            <Text fontSize="sm" data-test={`invoice_date_${invoice.id}`}>{new Date(invoice.date).toLocaleDateString()}</Text>
+                          <Td border="none" py={4} display={{ base: "none", md: "table-cell" }}>
+                            <Text fontSize={{ base: "sm", md: "sm" }} data-test={`invoice_date_${invoice.id}`}>{new Date(invoice.date).toLocaleDateString()}</Text>
                           </Td>
                           <Td border="none" py={4}>
                             <Text fontWeight="semibold" fontSize="lg" data-test={`invoice_amount_${invoice.id}`}>${invoice.amount}</Text>
@@ -308,6 +308,7 @@ export const Billing: React.FC = () => {
                               <Badge
                                 colorScheme={getStatusColor(invoice.status)}
                                 variant="subtle"
+                                fontSize={{ base: "xs", md: "sm" }}
                                 data-test={`invoice_status_${invoice.id}`}
                               >
                                 {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
@@ -337,9 +338,9 @@ export const Billing: React.FC = () => {
           <TabPanel data-test={'payment_methods_panel'}>
             <Card bg={cardBg} shadow="md" borderRadius="xl" data-test={'payment_methods_card'}>
               <CardHeader>
-                <Flex justify="space-between" align="center">
+                <Flex justify="space-between" align="center" direction={{ base: "column", md: "row" }} gap={4}>
                   <Heading size="md" data-test={'payment_methods_header'}>Payment Methods</Heading>
-                  <Button leftIcon={<FiPlus />} colorScheme="blue" onClick={onAddPaymentOpen} data-test={'add_payment_method_btn'}>
+                  <Button leftIcon={<FiPlus />} colorScheme="blue" onClick={onAddPaymentOpen} size={{ base: "sm", md: "md" }} data-test={'add_payment_method_btn'}>
                     Add Payment Method
                   </Button>
                 </Flex>

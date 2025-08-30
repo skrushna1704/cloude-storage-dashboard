@@ -4,14 +4,17 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// MSW setup for development
+// MSW setup for development and production (for Netlify deployment)
 async function enableMocking() {
-  if (process.env.NODE_ENV !== 'development') {
+  // Enable MSW in both development and production for Netlify
+  if (process.env.NODE_ENV === 'test') {
     return;
   }
 
   const { worker } = await import('./mocks/browser');
-  return worker.start();
+  return worker.start({
+    onUnhandledRequest: 'bypass', // Ignore unhandled requests
+  });
 }
 
 enableMocking().then(() => {

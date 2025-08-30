@@ -382,27 +382,28 @@ export const BucketDetail: React.FC = () => {
           data-test={'bucket_details_header'}
         >
           <VStack align="start" spacing={4} flex="1">
-            <HStack spacing={4} align="center">
+            <HStack spacing={4} align="center" flexWrap={{ base: "wrap", md: "nowrap" }}>
               <Box
-                p={3}
+                p={{ base: 2, md: 3 }}
                 bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
                 borderRadius="2xl"
                 boxShadow="0 8px 25px rgba(102, 126, 234, 0.3)"
                 data-test={'bucket_details_icon'}
               >
-                                 <ViewIcon color="white" boxSize={6} />
+                <ViewIcon color="white" boxSize={{ base: 5, md: 6 }} />
               </Box>
-              <VStack align="start" spacing={1}>
+              <VStack align="start" spacing={1} minW="0" flex="1">
                 <Heading 
-                  size={{ base: "xl", md: "2xl" }} 
+                  size={{ base: "lg", md: "2xl" }} 
                   bgGradient="linear(to-r, #667eea, #764ba2)" 
                   bgClip="text"
                   fontWeight="bold"
                   data-test={'bucket_details_name'}
+                  noOfLines={{ base: 1, md: 2 }}
                 >
                   {bucketInfo.name}
                 </Heading>
-                <Text fontSize="sm" color="gray.500" fontWeight="medium" data-test={'bucket_details_id'}>
+                <Text fontSize={{ base: "xs", md: "sm" }} color="gray.500" fontWeight="medium" data-test={'bucket_details_id'}>
                   Bucket ID: {bucketId}
                 </Text>
               </VStack>
@@ -414,6 +415,7 @@ export const BucketDetail: React.FC = () => {
                 borderRadius="full"
                 px={3}
                 py={1}
+                fontSize={{ base: "xs", md: "sm" }}
                 fontWeight="semibold"
                 boxShadow="0 2px 4px rgba(0, 0, 0, 0.1)"
                 data-test={'bucket_details_storage_class_badge'}
@@ -425,6 +427,7 @@ export const BucketDetail: React.FC = () => {
                 borderRadius="full"
                 px={3}
                 py={1}
+                fontSize={{ base: "xs", md: "sm" }}
                 borderColor="gray.300"
                 color="gray.600"
                 fontWeight="medium"
@@ -438,6 +441,7 @@ export const BucketDetail: React.FC = () => {
                   borderRadius="full"
                   px={3}
                   py={1}
+                  fontSize={{ base: "xs", md: "sm" }}
                   fontWeight="semibold"
                   boxShadow="0 2px 4px rgba(34, 197, 94, 0.2)"
                   data-test={'bucket_details_encryption_badge'}
@@ -451,6 +455,7 @@ export const BucketDetail: React.FC = () => {
                   borderRadius="full"
                   px={3}
                   py={1}
+                  fontSize={{ base: "xs", md: "sm" }}
                   fontWeight="semibold"
                   boxShadow="0 2px 4px rgba(59, 130, 246, 0.2)"
                   data-test={'bucket_details_versioning_badge'}
@@ -464,6 +469,7 @@ export const BucketDetail: React.FC = () => {
                   borderRadius="full"
                   px={3}
                   py={1}
+                  fontSize={{ base: "xs", md: "sm" }}
                   fontWeight="semibold"
                   boxShadow="0 2px 4px rgba(249, 115, 22, 0.2)"
                   data-test={'bucket_details_public_badge'}
