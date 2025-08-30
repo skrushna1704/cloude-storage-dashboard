@@ -342,7 +342,7 @@ export const BucketDetail: React.FC = () => {
   };
 
   return (
-    <Container maxW="full" px={{ base: 4, md: 8 }} py={8}>
+    <Container maxW="full" px={{ base: 4, md: 8 }} py={8} data-test={'bucket_details_page'}>
       <Box>
         {/* Enhanced Breadcrumb Navigation */}
         <Breadcrumb 
@@ -350,6 +350,7 @@ export const BucketDetail: React.FC = () => {
           separator={<ChevronRightIcon color="gray.500" />} 
           mb={8}
           fontSize="sm"
+          data-test={'bucket_details_breadcrumb'}
         >
           <BreadcrumbItem>
             <BreadcrumbLink 
@@ -357,7 +358,7 @@ export const BucketDetail: React.FC = () => {
               to={ROUTES.BUCKETS} 
               color="gray.500" 
               fontSize="sm" 
-              data-test='bucket_breadcrumb'
+              data-test={'bucket_breadcrumb'}
               _hover={{ color: '#667eea' }}
               transition="color 0.2s ease"
             >
@@ -365,7 +366,7 @@ export const BucketDetail: React.FC = () => {
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem isCurrentPage>
-            <Text fontSize="sm" fontWeight="semibold" color="gray.700">
+            <Text fontSize="sm" fontWeight="semibold" color="gray.700" data-test={'bucket_details_current_breadcrumb'}>
               {bucketInfo.name}
             </Text>
           </BreadcrumbItem>
@@ -378,6 +379,7 @@ export const BucketDetail: React.FC = () => {
           mb={10} 
           direction={{ base: "column", md: "row" }} 
           gap={6}
+          data-test={'bucket_details_header'}
         >
           <VStack align="start" spacing={4} flex="1">
             <HStack spacing={4} align="center">
@@ -386,6 +388,7 @@ export const BucketDetail: React.FC = () => {
                 bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
                 borderRadius="2xl"
                 boxShadow="0 8px 25px rgba(102, 126, 234, 0.3)"
+                data-test={'bucket_details_icon'}
               >
                                  <ViewIcon color="white" boxSize={6} />
               </Box>
@@ -395,16 +398,17 @@ export const BucketDetail: React.FC = () => {
                   bgGradient="linear(to-r, #667eea, #764ba2)" 
                   bgClip="text"
                   fontWeight="bold"
+                  data-test={'bucket_details_name'}
                 >
                   {bucketInfo.name}
                 </Heading>
-                <Text fontSize="sm" color="gray.500" fontWeight="medium">
+                <Text fontSize="sm" color="gray.500" fontWeight="medium" data-test={'bucket_details_id'}>
                   Bucket ID: {bucketId}
                 </Text>
               </VStack>
             </HStack>
             
-            <HStack spacing={3} flexWrap="wrap">
+            <HStack spacing={3} flexWrap="wrap" data-test={'bucket_details_badges'}>
               <Badge 
                 colorScheme={getStorageClassColor(bucketInfo.storageClass)}
                 borderRadius="full"
@@ -412,6 +416,7 @@ export const BucketDetail: React.FC = () => {
                 py={1}
                 fontWeight="semibold"
                 boxShadow="0 2px 4px rgba(0, 0, 0, 0.1)"
+                data-test={'bucket_details_storage_class_badge'}
               >
                 {bucketInfo.storageClass}
               </Badge>
@@ -423,6 +428,7 @@ export const BucketDetail: React.FC = () => {
                 borderColor="gray.300"
                 color="gray.600"
                 fontWeight="medium"
+                data-test={'bucket_details_region_badge'}
               >
                 {bucketInfo.region}
               </Badge>
@@ -434,6 +440,7 @@ export const BucketDetail: React.FC = () => {
                   py={1}
                   fontWeight="semibold"
                   boxShadow="0 2px 4px rgba(34, 197, 94, 0.2)"
+                  data-test={'bucket_details_encryption_badge'}
                 >
                   Encrypted
                 </Badge>
@@ -446,6 +453,7 @@ export const BucketDetail: React.FC = () => {
                   py={1}
                   fontWeight="semibold"
                   boxShadow="0 2px 4px rgba(59, 130, 246, 0.2)"
+                  data-test={'bucket_details_versioning_badge'}
                 >
                   Versioning
                 </Badge>
@@ -458,6 +466,7 @@ export const BucketDetail: React.FC = () => {
                   py={1}
                   fontWeight="semibold"
                   boxShadow="0 2px 4px rgba(249, 115, 22, 0.2)"
+                  data-test={'bucket_details_public_badge'}
                 >
                   Public
                 </Badge>
@@ -467,7 +476,7 @@ export const BucketDetail: React.FC = () => {
         </Flex>
 
         {/* Enhanced Stats Cards */}
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mb={10}>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mb={10} data-test={'bucket_details_stats_grid'}>
           <Card 
             bg={cardBg} 
             shadow="0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
@@ -479,14 +488,15 @@ export const BucketDetail: React.FC = () => {
               boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
             }}
             transition="all 0.3s ease"
+            data-test={'bucket_details_total_size_card'}
           >
             <CardBody py={6}>
               <Stat>
-                <StatLabel fontSize="sm" color="gray.500" fontWeight="semibold">Total Size</StatLabel>
-                <StatNumber fontSize="2xl" color="#667eea" fontWeight="bold">
+                <StatLabel fontSize="sm" color="gray.500" fontWeight="semibold" data-test={'bucket_details_total_size_label'}>Total Size</StatLabel>
+                <StatNumber fontSize="2xl" color="#667eea" fontWeight="bold" data-test={'bucket_details_total_size_value'}>
                   {formatStorageSize(bucketInfo.size)}
                 </StatNumber>
-                <StatHelpText fontSize="xs" color="gray.400">Storage used</StatHelpText>
+                <StatHelpText fontSize="xs" color="gray.400" data-test={'bucket_details_total_size_help'}>Storage used</StatHelpText>
               </Stat>
             </CardBody>
           </Card>
@@ -502,14 +512,15 @@ export const BucketDetail: React.FC = () => {
               boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
             }}
             transition="all 0.3s ease"
+            data-test={'bucket_details_objects_card'}
           >
             <CardBody py={6}>
               <Stat>
-                <StatLabel fontSize="sm" color="gray.500" fontWeight="semibold">Objects</StatLabel>
-                <StatNumber fontSize="2xl" color="#667eea" fontWeight="bold">
+                <StatLabel fontSize="sm" color="gray.500" fontWeight="semibold" data-test={'bucket_details_objects_label'}>Objects</StatLabel>
+                <StatNumber fontSize="2xl" color="#667eea" fontWeight="bold" data-test={'bucket_details_objects_value'}>
                   {bucketInfo.objects.toLocaleString()}
                 </StatNumber>
-                <StatHelpText fontSize="xs" color="gray.400">Files & folders</StatHelpText>
+                <StatHelpText fontSize="xs" color="gray.400" data-test={'bucket_details_objects_help'}>Files & folders</StatHelpText>
               </Stat>
             </CardBody>
           </Card>
@@ -525,14 +536,15 @@ export const BucketDetail: React.FC = () => {
               boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
             }}
             transition="all 0.3s ease"
+            data-test={'bucket_details_monthly_cost_card'}
           >
             <CardBody py={6}>
               <Stat>
-                <StatLabel fontSize="sm" color="gray.500" fontWeight="semibold">Monthly Cost</StatLabel>
-                <StatNumber fontSize="2xl" color="#667eea" fontWeight="bold">
+                <StatLabel fontSize="sm" color="gray.500" fontWeight="semibold" data-test={'bucket_details_monthly_cost_label'}>Monthly Cost</StatLabel>
+                <StatNumber fontSize="2xl" color="#667eea" fontWeight="bold" data-test={'bucket_details_monthly_cost_value'}>
                   ${bucketInfo.costThisMonth}
                 </StatNumber>
-                <StatHelpText fontSize="xs" color="gray.400">This month</StatHelpText>
+                <StatHelpText fontSize="xs" color="gray.400" data-test={'bucket_details_monthly_cost_help'}>This month</StatHelpText>
               </Stat>
             </CardBody>
           </Card>
@@ -548,14 +560,15 @@ export const BucketDetail: React.FC = () => {
               boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
             }}
             transition="all 0.3s ease"
+            data-test={'bucket_details_requests_card'}
           >
             <CardBody py={6}>
               <Stat>
-                <StatLabel fontSize="sm" color="gray.500" fontWeight="semibold">Requests</StatLabel>
-                <StatNumber fontSize="2xl" color="#667eea" fontWeight="bold">
+                <StatLabel fontSize="sm" color="gray.500" fontWeight="semibold" data-test={'bucket_details_requests_label'}>Requests</StatLabel>
+                <StatNumber fontSize="2xl" color="#667eea" fontWeight="bold" data-test={'bucket_details_requests_value'}>
                   {bucketInfo.requestsThisMonth.toLocaleString()}
                 </StatNumber>
-                <StatHelpText fontSize="xs" color="gray.400">This month</StatHelpText>
+                <StatHelpText fontSize="xs" color="gray.400" data-test={'bucket_details_requests_help'}>This month</StatHelpText>
               </Stat>
             </CardBody>
           </Card>
@@ -569,9 +582,10 @@ export const BucketDetail: React.FC = () => {
           border="1px solid"
           borderColor={borderColor}
           mb={10}
+          data-test={'bucket_details_security_card'}
         >
           <CardBody py={8}>
-            <Heading size="md" mb={8} data-test='bucket_details_security_heading' color="gray.700">
+            <Heading size="md" mb={8} data-test={'bucket_details_security_heading'} color="gray.700">
               Security & Configuration
             </Heading>
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
@@ -654,6 +668,7 @@ export const BucketDetail: React.FC = () => {
           borderRadius="2xl"
           border="1px solid"
           borderColor={borderColor}
+          data-test={'bucket_details_files_card'}
         >
           <CardBody py={8}>
             <Flex 
@@ -662,20 +677,21 @@ export const BucketDetail: React.FC = () => {
               mb={8} 
               direction={{ base: "column", md: "row" }} 
               gap={6}
+              data-test={'bucket_details_files_header'}
             >
               <VStack align={{ base: "center", md: "start" }} spacing={2}>
-                <Heading size="md" color="gray.700">Objects</Heading>
-                <Text fontSize="sm" color="gray.500">
+                <Heading size="md" color="gray.700" data-test={'bucket_details_files_heading'}>Objects</Heading>
+                <Text fontSize="sm" color="gray.500" data-test={'bucket_details_files_count'}>
                   {files.length} files and folders
                 </Text>
               </VStack>
-              <HStack spacing={3}>
+              <HStack spacing={3} data-test={'bucket_details_files_actions'}>
                 <Button 
                   leftIcon={<ViewIcon />} 
                   size="md" 
                   variant="outline" 
                   onClick={handleUploadFiles} 
-                  data-test='bucket_details_upload_files_btn'
+                  data-test={'bucket_details_upload_files_btn'}
                   borderRadius="xl"
                   borderColor="gray.200"
                   _hover={{
@@ -692,7 +708,7 @@ export const BucketDetail: React.FC = () => {
                   size="md" 
                   variant="outline" 
                   onClick={handleCreateFolder} 
-                  data-test='bucket_details_create_folder_btn'
+                  data-test={'bucket_details_create_folder_btn'}
                   borderRadius="xl"
                   borderColor="gray.200"
                   _hover={{
@@ -707,69 +723,72 @@ export const BucketDetail: React.FC = () => {
               </HStack>
             </Flex>
             
-            <Box overflowX="auto">
-              <Table variant="simple" size={{ base: "sm", md: "md" }}>
-                <Thead>
+            <Box overflowX="auto" data-test={'bucket_details_files_table_container'}>
+              <Table variant="simple" size={{ base: "sm", md: "md" }} data-test={'bucket_details_files_table'}>
+                <Thead data-test={'bucket_details_files_table_header'}>
                   <Tr>
-                    <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs" textTransform="uppercase" letterSpacing="wider">
+                    <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs" textTransform="uppercase" letterSpacing="wider" data-test={'bucket_details_files_name_header'}>
                       Name
                     </Th>
-                    <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs" textTransform="uppercase" letterSpacing="wider">
+                    <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs" textTransform="uppercase" letterSpacing="wider" data-test={'bucket_details_files_size_header'}>
                       Size
                     </Th>
-                    <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs" textTransform="uppercase" letterSpacing="wider">
+                    <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs" textTransform="uppercase" letterSpacing="wider" data-test={'bucket_details_files_storage_class_header'}>
                       Storage Class
                     </Th>
-                    <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs" textTransform="uppercase" letterSpacing="wider">
+                    <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs" textTransform="uppercase" letterSpacing="wider" data-test={'bucket_details_files_modified_header'}>
                       Modified
                     </Th>
-                    <Th border="none"></Th>
+                    <Th border="none" data-test={'bucket_details_files_actions_header'}></Th>
                   </Tr>
                 </Thead>
-                <Tbody>
+                <Tbody data-test={'bucket_details_files_table_body'}>
                   {files.map((file, index) => (
                     <Tr
                       key={index}
                       _hover={{ bg: tableRowHoverBg }}
                       cursor="pointer"
                       transition="background-color 0.2s ease"
+                      data-test={`bucket_details_file_row_${index}`}
                     >
-                      <Td border="none" py={4}>
+                      <Td border="none" py={4} data-test={`bucket_details_file_name_${index}`}>
                         <HStack spacing={3}>
                           <Box
                             p={1}
                             bg={file.type === 'folder' ? 'blue.100' : 'gray.100'}
                             borderRadius="md"
+                            data-test={`bucket_details_file_icon_${index}`}
                           >
                             <FileIcon type={file.type} />
                           </Box>
-                          <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }} color="gray.700">
+                          <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }} color="gray.700" data-test={`bucket_details_file_name_text_${index}`}>
                             {file.name}
                           </Text>
                         </HStack>
                       </Td>
-                      <Td border="none" py={4}>
-                        <Text fontSize={{ base: "sm", md: "sm" }} color="gray.600">
+                      <Td border="none" py={4} data-test={`bucket_details_file_size_${index}`}>
+                        <Text fontSize={{ base: "sm", md: "sm" }} color="gray.600" data-test={`bucket_details_file_size_text_${index}`}>
                           {formatSize(file.size)}
                         </Text>
                       </Td>
-                      <Td border="none" py={4}>
+                      <Td border="none" py={4} data-test={`bucket_details_file_storage_class_${index}`}>
                         <Badge 
                           colorScheme={getStorageClassColor(file.storageClass)} 
                           size={{ base: "sm", md: "sm" }}
                           borderRadius="full"
                           px={3}
                           py={1}
+                          data-test={`bucket_details_file_storage_class_badge_${index}`}
                         >
                           {file.storageClass}
                         </Badge>
                       </Td>
-                      <Td border="none" py={4}>
-                        <Text fontSize={{ base: "sm", md: "sm" }} color="gray.600">
+                      <Td border="none" py={4} data-test={`bucket_details_file_modified_${index}`}>
+                        <Text fontSize={{ base: "sm", md: "sm" }} color="gray.600" data-test={`bucket_details_file_modified_text_${index}`}>
                           {file.modified}
                         </Text>
                       </Td>
-                      <Td border="none" py={4}>
+                      <Td border="none" py={4} data-test={`bucket_details_file_actions_${index}`}>
                         <Menu>
                           <MenuButton
                             as={IconButton}
@@ -778,13 +797,15 @@ export const BucketDetail: React.FC = () => {
                             size={{ base: "sm", md: "sm" }}
                             borderRadius="md"
                             _hover={{ bg: 'gray.100' }}
+                            data-test={`bucket_details_file_menu_btn_${index}`}
                           />
-                          <MenuList borderRadius="xl" shadow="xl">
+                          <MenuList borderRadius="xl" shadow="xl" data-test={`bucket_details_file_menu_${index}`}>
                             <MenuItem 
                               icon={<DownloadIcon />} 
                               onClick={() => handleDownloadFile(file)}
                               borderRadius="md"
                               _hover={{ bg: 'blue.50' }}
+                              data-test={`bucket_details_file_download_${index}`}
                             >
                               Download
                             </MenuItem>
@@ -793,6 +814,7 @@ export const BucketDetail: React.FC = () => {
                               onClick={() => handleRenameFile(file)}
                               borderRadius="md"
                               _hover={{ bg: 'green.50' }}
+                              data-test={`bucket_details_file_rename_${index}`}
                             >
                               Rename
                             </MenuItem>
@@ -801,6 +823,7 @@ export const BucketDetail: React.FC = () => {
                               onClick={() => handlePreviewFile(file)}
                               borderRadius="md"
                               _hover={{ bg: 'purple.50' }}
+                              data-test={`bucket_details_file_preview_${index}`}
                             >
                               Preview
                             </MenuItem>
@@ -811,6 +834,7 @@ export const BucketDetail: React.FC = () => {
                               onClick={() => handleDeleteFile(file)}
                               borderRadius="md"
                               _hover={{ bg: 'red.50' }}
+                              data-test={`bucket_details_file_delete_${index}`}
                             >
                               Delete
                             </MenuItem>

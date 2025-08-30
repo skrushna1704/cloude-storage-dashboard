@@ -127,7 +127,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onClose }) 
       as="aside"
       position="sticky"
       top="73px"
-      height="auto"
+      height="100vh"
       width={collapsed ? '70px' : '280px'}
       bg={bgColor}
       backdropFilter="blur(20px)"

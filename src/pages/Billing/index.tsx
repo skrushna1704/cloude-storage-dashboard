@@ -152,27 +152,27 @@ export const Billing: React.FC = () => {
   }
 
   return (
-    <Box data-testid={testIds.billing_page}>
+    <Box data-test={'billing_page'}>
       {/* Header */}
       <VStack align="start" spacing={1} mb={8}>
-        <Heading size={{ base: "lg", md: "xl" }} bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text">
+        <Heading size={{ base: "lg", md: "xl" }} bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text" data-test={'billing_header'}>
           Billing & Payments
         </Heading>
-        <Text color="gray.600" fontSize={{ base: "md", md: "lg" }}>
+        <Text color="gray.600" fontSize={{ base: "md", md: "lg" }} data-test={'billing_description'}>
           Manage your billing information, view invoices, and track payments
         </Text>
       </VStack>
 
       {/* Billing Overview Cards */}
-      <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing={6} mb={8}>
-        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="green.500">
+      <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing={6} mb={8} data-test={'billing_cards'}>
+        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="green.500" data-test={'current_month_card'}>
           <CardBody>
             <Stat>
-              <StatLabel fontSize="sm" color="gray.500" mb={1}>Current Month</StatLabel>
-              <StatNumber fontSize="2xl" color="green.500" mb={2}>
+              <StatLabel fontSize="sm" color="gray.500" mb={1} data-test={'current_month_label'}>Current Month</StatLabel>
+              <StatNumber fontSize="2xl" color="green.500" mb={2} data-test={'current_month_value'}>
                 ${billingData.currentMonth}
               </StatNumber>
-              <StatHelpText fontSize="xs">
+              <StatHelpText fontSize="xs" data-test={'current_month_trend'}>
                 <StatArrow type={billingData.trend > 0 ? 'increase' : 'decrease'} />
                 {Math.abs(billingData.trend)}% from last month
               </StatHelpText>
@@ -180,11 +180,11 @@ export const Billing: React.FC = () => {
           </CardBody>
         </Card>
 
-        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="blue.500">
+        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="blue.500" data-test={'storage_usage_card'}>
           <CardBody>
             <Stat>
-              <StatLabel fontSize="sm" color="gray.500" mb={1}>Storage Usage</StatLabel>
-              <StatNumber fontSize="2xl" color="blue.500" mb={2}>
+              <StatLabel fontSize="sm" color="gray.500" mb={1} data-test={'storage_usage_label'}>Storage Usage</StatLabel>
+              <StatNumber fontSize="2xl" color="blue.500" mb={2} data-test={'storage_usage_value'}>
                 {billingData.totalStorage} GB
               </StatNumber>
               <Progress
@@ -193,36 +193,37 @@ export const Billing: React.FC = () => {
                 size="sm"
                 borderRadius="full"
                 mb={2}
+                data-test={'storage_usage_progress'}
               />
-              <StatHelpText fontSize="xs">
+              <StatHelpText fontSize="xs" data-test={'storage_usage_help_text'}>
                 {((billingData.totalStorage / billingData.storageLimit) * 100).toFixed(1)}% of {billingData.storageLimit} GB limit
               </StatHelpText>
             </Stat>
           </CardBody>
         </Card>
 
-        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="orange.500">
+        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="orange.500" data-test={'upcoming_payment_card'}>
           <CardBody>
             <Stat>
-              <StatLabel fontSize="sm" color="gray.500" mb={1}>Upcoming Payment</StatLabel>
-              <StatNumber fontSize="2xl" color="orange.500" mb={2}>
+              <StatLabel fontSize="sm" color="gray.500" mb={1} data-test={'upcoming_payment_label'}>Upcoming Payment</StatLabel>
+              <StatNumber fontSize="2xl" color="orange.500" mb={2} data-test={'upcoming_payment_value'}>
                 ${billingData.upcomingPayment}
               </StatNumber>
-              <StatHelpText fontSize="xs">
+              <StatHelpText fontSize="xs" data-test={'upcoming_payment_due_date'}>
                 Due: {new Date(billingData.dueDate).toLocaleDateString()}
               </StatHelpText>
             </Stat>
           </CardBody>
         </Card>
 
-        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="purple.500">
+        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="purple.500" data-test={'payment_methods_count_card'}>
           <CardBody>
             <Stat>
-              <StatLabel fontSize="sm" color="gray.500" mb={1}>Payment Methods</StatLabel>
-              <StatNumber fontSize="2xl" color="purple.500" mb={2}>
+              <StatLabel fontSize="sm" color="gray.500" mb={1} data-test={'payment_methods_label'}>Payment Methods</StatLabel>
+              <StatNumber fontSize="2xl" color="purple.500" mb={2} data-test={'payment_methods_count'}>
                 {paymentMethods.length}
               </StatNumber>
-              <StatHelpText fontSize="xs">
+              <StatHelpText fontSize="xs" data-test={'payment_methods_default_count'}>
                 {paymentMethods.filter(pm => pm.isDefault).length} default
               </StatHelpText>
             </Stat>
@@ -231,41 +232,42 @@ export const Billing: React.FC = () => {
       </SimpleGrid>
 
       {/* Main Content Tabs */}
-      <Tabs variant="enclosed" colorScheme="blue">
-        <TabList>
-          <Tab>Invoices</Tab>
-          <Tab>Payment Methods</Tab>
-          <Tab>Billing History</Tab>
+      <Tabs variant="enclosed" colorScheme="blue" data-test={'billing_tabs'}>
+        <TabList data-test={'billing_tab_list'}>
+          <Tab data-test={'invoices_tab'}>Invoices</Tab>
+          <Tab data-test={'payment_methods_tab'}>Payment Methods</Tab>
+          <Tab data-test={'billing_history_tab'}>Billing History</Tab>
         </TabList>
 
         <TabPanels>
           {/* Invoices Tab */}
-          <TabPanel>
-            <Card bg={cardBg} shadow="md" borderRadius="xl">
+          <TabPanel data-test={'invoices_panel'}>
+            <Card bg={cardBg} shadow="md" borderRadius="xl" data-test={'invoices_card'}>
               <CardHeader>
                 <Flex justify="space-between" align="center">
-                  <Heading size="md">Invoices</Heading>
+                  <Heading size="md" data-test={'invoices_header'}>Invoices</Heading>
                   <HStack>
                     <Select
                       size="sm"
                       value={selectedPeriod}
                       onChange={(e) => setSelectedPeriod(e.target.value)}
                       width="150px"
+                      data-test={'invoice_period_filter'}
                     >
                       <option value="current">Current Month</option>
                       <option value="last3">Last 3 Months</option>
                       <option value="last6">Last 6 Months</option>
                       <option value="all">All Time</option>
                     </Select>
-                    <Button leftIcon={<FiDownload />} size="sm" variant="outline">
+                    <Button leftIcon={<FiDownload />} size="sm" variant="outline" data-test={'export_invoices_btn'}>
                       Export
                     </Button>
                   </HStack>
                 </Flex>
               </CardHeader>
               <CardBody pt={0}>
-                <TableContainer>
-                  <Table variant="simple" size="md">
+                <TableContainer data-test={'invoices_table_container'}>
+                  <Table variant="simple" size="md" data-test={'invoices_table'}>
                     <Thead>
                       <Tr>
                         <Th border="none" color="gray.500" fontWeight="semibold" fontSize="xs">
@@ -285,20 +287,20 @@ export const Billing: React.FC = () => {
                         </Th>
                       </Tr>
                     </Thead>
-                    <Tbody>
+                    <Tbody data-test={'invoices_table_body'}>
                       {invoices.map((invoice) => (
-                        <Tr key={invoice.id} _hover={{ bg: hoverBg }}>
+                        <Tr key={invoice.id} _hover={{ bg: hoverBg }} data-test={`invoice_row_${invoice.id}`}>
                           <Td border="none" py={4}>
                             <VStack align="start" spacing={1}>
-                              <Text fontWeight="medium">{invoice.invoiceNumber}</Text>
-                              <Text fontSize="sm" color="gray.600">{invoice.description}</Text>
+                              <Text fontWeight="medium" data-test={`invoice_number_${invoice.id}`}>{invoice.invoiceNumber}</Text>
+                              <Text fontSize="sm" color="gray.600" data-test={`invoice_description_${invoice.id}`}>{invoice.description}</Text>
                             </VStack>
                           </Td>
                           <Td border="none" py={4}>
-                            <Text fontSize="sm">{new Date(invoice.date).toLocaleDateString()}</Text>
+                            <Text fontSize="sm" data-test={`invoice_date_${invoice.id}`}>{new Date(invoice.date).toLocaleDateString()}</Text>
                           </Td>
                           <Td border="none" py={4}>
-                            <Text fontWeight="semibold" fontSize="lg">${invoice.amount}</Text>
+                            <Text fontWeight="semibold" fontSize="lg" data-test={`invoice_amount_${invoice.id}`}>${invoice.amount}</Text>
                           </Td>
                           <Td border="none" py={4}>
                             <HStack spacing={1}>
@@ -306,6 +308,7 @@ export const Billing: React.FC = () => {
                               <Badge
                                 colorScheme={getStatusColor(invoice.status)}
                                 variant="subtle"
+                                data-test={`invoice_status_${invoice.id}`}
                               >
                                 {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
                               </Badge>
@@ -313,10 +316,10 @@ export const Billing: React.FC = () => {
                           </Td>
                           <Td border="none" py={4}>
                             <HStack spacing={2}>
-                              <Button size="sm" variant="ghost" leftIcon={<FiEye />}>
+                              <Button size="sm" variant="ghost" leftIcon={<FiEye />} data-test={`view_invoice_btn_${invoice.id}`}>
                                 View
                               </Button>
-                              <Button size="sm" variant="ghost" leftIcon={<FiDownload />}>
+                              <Button size="sm" variant="ghost" leftIcon={<FiDownload />} data-test={`download_invoice_btn_${invoice.id}`}>
                                 Download
                               </Button>
                             </HStack>
@@ -331,38 +334,38 @@ export const Billing: React.FC = () => {
           </TabPanel>
 
           {/* Payment Methods Tab */}
-          <TabPanel>
-            <Card bg={cardBg} shadow="md" borderRadius="xl">
+          <TabPanel data-test={'payment_methods_panel'}>
+            <Card bg={cardBg} shadow="md" borderRadius="xl" data-test={'payment_methods_card'}>
               <CardHeader>
                 <Flex justify="space-between" align="center">
-                  <Heading size="md">Payment Methods</Heading>
-                  <Button leftIcon={<FiPlus />} colorScheme="blue" onClick={onAddPaymentOpen}>
+                  <Heading size="md" data-test={'payment_methods_header'}>Payment Methods</Heading>
+                  <Button leftIcon={<FiPlus />} colorScheme="blue" onClick={onAddPaymentOpen} data-test={'add_payment_method_btn'}>
                     Add Payment Method
                   </Button>
                 </Flex>
               </CardHeader>
               <CardBody pt={0}>
-                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} data-test={'payment_methods_grid'}>
                   {paymentMethods.map((method) => (
-                    <Card key={method.id} variant="outline" borderColor={borderColor}>
+                    <Card key={method.id} variant="outline" borderColor={borderColor} data-test={`payment_method_card_${method.id}`}>
                       <CardBody>
                         <HStack justify="space-between" align="start">
                           <VStack align="start" spacing={2}>
                             <HStack>
                               <Icon as={FiCreditCard} color="blue.500" />
-                              <Text fontWeight="medium">{method.brand}</Text>
+                              <Text fontWeight="medium" data-test={`payment_method_brand_${method.id}`}>{method.brand}</Text>
                               {method.isDefault && (
-                                <Badge colorScheme="green" size="sm">Default</Badge>
+                                <Badge colorScheme="green" size="sm" data-test={`payment_method_default_${method.id}`}>Default</Badge>
                               )}
                             </HStack>
-                            <Text fontSize="sm" color="gray.600">
+                            <Text fontSize="sm" color="gray.600" data-test={`payment_method_last4_${method.id}`}>
                               •••• •••• •••• {method.last4}
                             </Text>
-                            <Text fontSize="sm" color="gray.600">
+                            <Text fontSize="sm" color="gray.600" data-test={`payment_method_expiry_${method.id}`}>
                               Expires {method.expiryDate}
                             </Text>
                           </VStack>
-                          <Button size="sm" variant="ghost">
+                          <Button size="sm" variant="ghost" data-test={`edit_payment_method_btn_${method.id}`}>
                             Edit
                           </Button>
                         </HStack>
@@ -428,12 +431,12 @@ export const Billing: React.FC = () => {
       </Tabs>
 
       {/* Add Payment Method Modal */}
-      <Modal isOpen={isAddPaymentOpen} onClose={onAddPaymentClose} size={{ base: "full", md: "lg" }}>
+      <Modal isOpen={isAddPaymentOpen} onClose={onAddPaymentClose} size={{ base: "full", md: "lg" }} data-test={'add_payment_modal'}>
         <ModalOverlay />
                   <ModalContent mx={{ base: 4, md: 0 }}>
-          <ModalHeader>Add Payment Method</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
+          <ModalHeader data-test={'add_payment_modal_header'}>Add Payment Method</ModalHeader>
+          <ModalCloseButton data-test={'add_payment_modal_close'} />
+          <ModalBody data-test={'add_payment_modal_body'}>
             <VStack spacing={4}>
               <FormControl>
                 <FormLabel>Card Number</FormLabel>

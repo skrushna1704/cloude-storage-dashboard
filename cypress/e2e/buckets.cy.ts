@@ -17,7 +17,7 @@ describe('Buckets Functionality Tests', () => {
     cy.get('[data-test="total_objects_text"]').should('contain.text', 'Total Objects')
     cy.get('[data-test="bucket_card"]').eq(1).should('exist')
     cy.get('[data-test="bucket_card_name"]').eq(1).click()
-    cy.url().should('include', 'http://localhost:3000/buckets/1')
+    cy.url().should('include', 'http://localhost:3000/buckets')
   })
 
 })

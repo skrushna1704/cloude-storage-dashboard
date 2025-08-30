@@ -116,38 +116,38 @@ export const Analytics: React.FC = () => {
   }
 
   return (
-    <Box data-testid={testIds.analytics_page}>
+    <Box data-test={'analytics_page'}>
       {/* Header */}
       <Flex justify="space-between" align="center" mb={8} direction={{ base: "column", md: "row" }} gap={4}>
         <VStack align="start" spacing={1}>
-          <Heading size={{ base: "lg", md: "xl" }} bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text">
+          <Heading size={{ base: "lg", md: "xl" }} bgGradient="linear(to-r, #667eea, #764ba2)" bgClip="text" data-test={'analytics_header'}>
             Analytics Dashboard
           </Heading>
-          <Text color="gray.600" fontSize={{ base: "md", md: "lg" }}>
+          <Text color="gray.600" fontSize={{ base: "md", md: "lg" }} data-test={'analytics_description'}>
             Monitor your storage usage, costs, and performance metrics
           </Text>
         </VStack>
         
         <HStack spacing={3}>
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline" size={{ base: "sm", md: "md" }} data-testid={testIds.analytics_period_selector}>
+            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline" size={{ base: "sm", md: "md" }} data-test={'analytics_period_selector'}>
               {selectedPeriod === '7d' ? 'Last 7 Days' : 
                selectedPeriod === '30d' ? 'Last 30 Days' : 
                selectedPeriod === '90d' ? 'Last 90 Days' : 
                selectedPeriod === '1y' ? 'Last Year' : 'Last 30 Days'}
             </MenuButton>
-            <MenuList>
-              <MenuItem onClick={() => setSelectedPeriod('7d')}>Last 7 Days</MenuItem>
-              <MenuItem onClick={() => setSelectedPeriod('30d')}>Last 30 Days</MenuItem>
-              <MenuItem onClick={() => setSelectedPeriod('90d')}>Last 90 Days</MenuItem>
-              <MenuItem onClick={() => setSelectedPeriod('1y')}>Last Year</MenuItem>
+            <MenuList data-test={'period_options'}>
+              <MenuItem onClick={() => setSelectedPeriod('7d')} data-test={'period_7d'}>Last 7 Days</MenuItem>
+              <MenuItem onClick={() => setSelectedPeriod('30d')} data-test={'period_30d'}>Last 30 Days</MenuItem>
+              <MenuItem onClick={() => setSelectedPeriod('90d')} data-test={'period_90d'}>Last 90 Days</MenuItem>
+              <MenuItem onClick={() => setSelectedPeriod('1y')} data-test={'period_1y'}>Last Year</MenuItem>
             </MenuList>
           </Menu>
           <Button 
             leftIcon={<DownloadIcon />} 
             variant="outline" 
             size={{ base: "sm", md: "md" }} 
-            data-testid={testIds.export_report_btn}
+            data-test={'export_report_btn'}
             onClick={handleExportReport}
           >
             Export Report
@@ -157,22 +157,22 @@ export const Analytics: React.FC = () => {
 
       {/* Alerts */}
       {analyticsData.alerts.length > 0 && (
-        <Card bg={cardBg} shadow="md" borderRadius="xl" mb={8} border="1px solid" borderColor="orange.200">
+        <Card bg={cardBg} shadow="md" borderRadius="xl" mb={8} border="1px solid" borderColor="orange.200" data-test={'analytics_alerts'}>
           <CardHeader pb={2}>
             <HStack>
               <WarningIcon color="orange.500" />
-              <Heading size="md">Recent Alerts</Heading>
+              <Heading size="md" data-test={'alerts_header'}>Recent Alerts</Heading>
             </HStack>
           </CardHeader>
           <CardBody pt={0}>
             <VStack spacing={3} align="stretch">
               {analyticsData.alerts.map((alert, index) => (
-                <HStack key={index} p={3} bg="orange.50" borderRadius="lg" spacing={3}>
+                <HStack key={index} p={3} bg="orange.50" borderRadius="lg" spacing={3} data-test={`alert_${index}`}>
                   {getAlertIcon(alert.type)}
-                  <Text flex="1" fontSize="sm">
+                  <Text flex="1" fontSize="sm" data-test={`alert_message_${index}`}>
                     {alert.message}
                   </Text>
-                  <Badge colorScheme={getSeverityColor(alert.severity)}>
+                  <Badge colorScheme={getSeverityColor(alert.severity)} data-test={`alert_severity_${index}`}>
                     {alert.severity}
                   </Badge>
                 </HStack>
@@ -183,12 +183,12 @@ export const Analytics: React.FC = () => {
       )}
 
       {/* Main Metrics */}
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mb={8}>
-        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="blue.500">
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mb={8} data-test={'analytics_metrics'}>
+        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="blue.500" data-test={'total_storage_metric'}>
           <CardBody>
             <Stat>
-              <StatLabel fontSize="sm" color="gray.500" mb={1}>Total Storage</StatLabel>
-              <StatNumber fontSize="2xl" color="blue.500" mb={2}>
+              <StatLabel fontSize="sm" color="gray.500" mb={1} data-test={'storage_label'}>Total Storage</StatLabel>
+              <StatNumber fontSize="2xl" color="blue.500" mb={2} data-test={'storage_value'}>
                 {formatSize(analyticsData.totalStorage)}
               </StatNumber>
               <Progress
@@ -197,22 +197,23 @@ export const Analytics: React.FC = () => {
                 size="sm"
                 borderRadius="full"
                 mb={2}
+                data-test={'storage_progress'}
               />
-              <StatHelpText fontSize="xs">
+              <StatHelpText fontSize="xs" data-test={'storage_help_text'}>
                 {((analyticsData.totalStorage / analyticsData.storageLimit) * 100).toFixed(1)}% of {formatSize(analyticsData.storageLimit)} limit
               </StatHelpText>
             </Stat>
           </CardBody>
         </Card>
 
-        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="green.500">
+        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="green.500" data-test={'monthly_cost_metric'}>
           <CardBody>
             <Stat>
-              <StatLabel fontSize="sm" color="gray.500" mb={1}>Monthly Cost</StatLabel>
-              <StatNumber fontSize="2xl" color="green.500" mb={2}>
+              <StatLabel fontSize="sm" color="gray.500" mb={1} data-test={'cost_label'}>Monthly Cost</StatLabel>
+              <StatNumber fontSize="2xl" color="green.500" mb={2} data-test={'cost_value'}>
                 {formatCurrency(analyticsData.monthlyCost)}
               </StatNumber>
-              <StatHelpText fontSize="xs">
+              <StatHelpText fontSize="xs" data-test={'cost_help_text'}>
                 <StatArrow type={analyticsData.costTrend > 0 ? 'increase' : 'decrease'} />
                 {Math.abs(analyticsData.costTrend)}% from last month
               </StatHelpText>
@@ -220,14 +221,14 @@ export const Analytics: React.FC = () => {
           </CardBody>
         </Card>
 
-        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="purple.500">
+        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="purple.500" data-test={'requests_metric'}>
           <CardBody>
             <Stat>
-              <StatLabel fontSize="sm" color="gray.500" mb={1}>API Requests</StatLabel>
-              <StatNumber fontSize="2xl" color="purple.500" mb={2}>
+              <StatLabel fontSize="sm" color="gray.500" mb={1} data-test={'requests_label'}>API Requests</StatLabel>
+              <StatNumber fontSize="2xl" color="purple.500" mb={2} data-test={'requests_value'}>
                 {formatNumber(analyticsData.requests)}
               </StatNumber>
-              <StatHelpText fontSize="xs">
+              <StatHelpText fontSize="xs" data-test={'requests_help_text'}>
                 <StatArrow type={analyticsData.requestsTrend > 0 ? 'increase' : 'decrease'} />
                 {Math.abs(analyticsData.requestsTrend)}% from last month
               </StatHelpText>
@@ -235,14 +236,14 @@ export const Analytics: React.FC = () => {
           </CardBody>
         </Card>
 
-        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="orange.500">
+        <Card bg={cardBg} shadow="md" borderRadius="xl" borderLeft="4px solid" borderLeftColor="orange.500" data-test={'bandwidth_metric'}>
           <CardBody>
             <Stat>
-              <StatLabel fontSize="sm" color="gray.500" mb={1}>Bandwidth</StatLabel>
-              <StatNumber fontSize="2xl" color="orange.500" mb={2}>
+              <StatLabel fontSize="sm" color="gray.500" mb={1} data-test={'bandwidth_label'}>Bandwidth</StatLabel>
+              <StatNumber fontSize="2xl" color="orange.500" mb={2} data-test={'bandwidth_value'}>
                 {analyticsData.bandwidth.toFixed(1)} TB
               </StatNumber>
-              <StatHelpText fontSize="xs">
+              <StatHelpText fontSize="xs" data-test={'bandwidth_help_text'}>
                 <StatArrow type={analyticsData.bandwidthTrend > 0 ? 'increase' : 'decrease'} />
                 {Math.abs(analyticsData.bandwidthTrend)}% from last month
               </StatHelpText>
