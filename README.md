@@ -1,6 +1,6 @@
 # Cloud Storage Dashboard
 
-A modern, responsive React application for managing cloud storage buckets, objects, and analytics. Built with TypeScript, Redux Toolkit, and Material-UI components.
+A modern, responsive React application for managing cloud storage buckets, objects, and analytics. Built with React, TypeScript, Redux Toolkit, and Chakra UI components.
 
 ## 🚀 Features
 
@@ -19,8 +19,7 @@ A modern, responsive React application for managing cloud storage buckets, objec
 - **Usage Metrics**: Bandwidth and request statistics
 
 **User Interface:**
-- **Modern UI**: Clean, intuitive interface with Material-UI components
-- **Dark/Light Theme**: Theme switching capability
+- **Modern UI**: Clean, intuitive interface with Chakra UI components
 - **Notifications**: Toast notifications for user feedback
 - **Loading States**: Proper loading indicators throughout the app
 - **Error Handling**: Comprehensive error boundaries and user-friendly error messages
@@ -31,43 +30,14 @@ A modern, responsive React application for managing cloud storage buckets, objec
 - **Mobile Menu**: Responsive mobile navigation
 - **Breadcrumbs**: File path navigation in bucket details
 
-### 🔄 In Progress / Partially Implemented
-
-**Advanced Features:**
-- **File Preview**: Basic preview for images and text files (needs enhancement for more file types)
-- **Bulk Operations**: Multi-select functionality for files (UI ready, backend integration needed)
-- **Real-time Updates**: WebSocket integration for live updates
-
-### ❌ Missing Features
-
-**Authentication & Security:**
-- User authentication and authorization
-- Role-based access control
-- API key management
-
-**Advanced File Management:**
-- File versioning
-- File sharing and permissions
-- Advanced file search with filters
-- File metadata editing
-
-**Backend Integration:**
-- Real cloud storage API integration (currently using mock data)
-- File upload progress tracking
-- Background sync capabilities
-
-**Performance & Optimization:**
-- Virtual scrolling for large file lists
-- Image optimization and thumbnails
-- Caching strategies
-
 ## 🛠️ Tech Stack
 
-- **Frontend**: React 18, TypeScript
+- **Frontend**: React 19, TypeScript
 - **State Management**: Redux Toolkit
-- **UI Framework**: Material-UI (MUI)
-- **Styling**: CSS Modules, Emotion
-- **Testing**: Cypress (E2E), Jest (unit tests)
+- **API Integration**: MSW (Mock Service Worker)
+- **UI Framework**: Chakra UI
+- **Styling**: Emotion (CSS-in-JS)
+- **Testing**: Cypress (E2E)
 - **Build Tool**: Create React App
 - **Package Manager**: npm
 
@@ -102,17 +72,16 @@ A modern, responsive React application for managing cloud storage buckets, objec
 
 - `npm start` - Start development server
 - `npm run build` - Build for production
-- `npm test` - Run unit tests
-- `npm run test:e2e` - Run Cypress E2E tests
-- `npm run test:open` - Open Cypress test runner
-- `npm run lint` - Run ESLint
-- `npm run type-check` - Run TypeScript type checking
+- `npm test` - Run Cypress tests in headless mode
+- `npm run test:open` - Open Cypress Test Runner
+- `npm run test:e2e` - Run all E2E tests
+- `npm run test:component` - Run component tests
+- `npm run test:component` - Run component tests
 
 ## 🧪 Testing
 
 The project includes comprehensive testing setup:
 
-- **Unit Tests**: Jest with React Testing Library
 - **E2E Tests**: Cypress for end-to-end testing
 - **Component Tests**: Isolated component testing
 
@@ -128,21 +97,21 @@ src/
 │   ├── common/         # Shared components (Layout, Header, etc.)
 │   └── objects/        # File management components
 ├── pages/              # Page components
+│   ├── Analytics/      # Analytics dashboard
+│   ├── Billing/        # Billing and payments
+│   ├── BucketDetail/   # Individual bucket view
+│   └── Buckets/        # Buckets overview
 ├── services/           # API services and utilities
 ├── store/              # Redux store and slices
 ├── types/              # TypeScript type definitions
 ├── utils/              # Utility functions
-└── theme/              # Theme configuration
+├── theme/              # Theme configuration
+├── hooks/              # Custom React hooks
+├── constants/          # Application constants
+└── mocks/              # MSW mock handlers
 ```
 
 ## 🎨 Customization
-
-### Theme Configuration
-The app uses a custom theme system. Modify `src/theme/` files to customize:
-- Colors and palettes
-- Typography
-- Component styles
-- Spacing and layout
 
 ### Adding New Features
 1. Create components in appropriate directories
@@ -163,7 +132,9 @@ The build artifacts will be stored in the `build/` directory.
 - **Netlify**: Drag and drop the `build` folder
 - **Vercel**: Connect your repository for automatic deployments
 - **AWS S3**: Upload build files to S3 bucket
-- **Docker**: Use the provided Dockerfile
+
+### Environment Variables
+- `REACT_APP_API_URL` - API base URL (defaults to `/api` for MSW)
 
 ## 🤝 Contributing
 
@@ -178,35 +149,10 @@ The build artifacts will be stored in the `build/` directory.
 - Write tests for new features
 - Use conventional commit messages
 - Ensure responsive design works on all devices
+- Use Chakra UI components for consistency
 
-## 📝 License
+## 📝 Notes
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+**Note**: This application currently uses MSW (Mock Service Worker) for API mocking. Real cloud storage integration requires backend API development and cloud provider credentials.
 
-## 🆘 Support
-
-If you encounter any issues:
-1. Check the [Issues](../../issues) page
-2. Create a new issue with detailed information
-3. Include browser console errors and steps to reproduce
-
-## 🔮 Roadmap
-
-**Short Term (Next Sprint):**
-- Complete file preview functionality
-- Add bulk file operations
-- Implement real-time notifications
-
-**Medium Term (Next Quarter):**
-- Authentication system
-- Real cloud storage API integration
-- Advanced search and filtering
-
-**Long Term (Next Release):**
-- File versioning
-- Collaboration features
-- Mobile app development
-
----
-
-**Note**: This application currently uses mock data for demonstration purposes. Real cloud storage integration requires backend API development and cloud provider credentials.
+The app is fully responsive and optimized for mobile, tablet, and desktop devices with a mobile-first approach.
