@@ -19,6 +19,7 @@ import {
   useColorModeValue,
   Flex,
   Checkbox,
+  Badge,
 } from '@chakra-ui/react';
 import {
   SearchIcon,
@@ -49,7 +50,8 @@ export const BucketList: React.FC<BucketListProps> = ({
   const [sortField, setSortField] = useState<SortField>('name');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   
-  const cardBg = useColorModeValue('white', 'gray.700');
+  const cardBg = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('gray.100', 'gray.700');
 
   // Get unique regions and storage classes for filters
   const regions = useMemo(() => {
@@ -141,178 +143,331 @@ export const BucketList: React.FC<BucketListProps> = ({
 
   return (
     <Box>
-      {/* Summary Stats */}
-      <Card bg={cardBg} shadow="md" borderRadius="xl" mb={6}>
-        <CardBody>
-          <HStack spacing={8} justify="space-around">
-            <VStack spacing={1}>
-              <Text fontSize="2xl" fontWeight="bold" color="blue.500">
-                {buckets.length}
-              </Text>
-              <Text fontSize="sm" color="gray.500" data-test={testIds.total_buckets_text}>Total Buckets</Text>
-            </VStack>
-            <VStack spacing={1}>
-              <Text fontSize="2xl" fontWeight="bold" color="green.500">
-                {totalStorageTB.toFixed(1)} GB
-              </Text>
-              <Text fontSize="sm" color="gray.500" data-test={testIds.total_storage_text}>Total Storage</Text>
-            </VStack>
-            <VStack spacing={1}>
-              <Text fontSize="2xl" fontWeight="bold" color="purple.500">
-                {(totalObjects / 1000).toFixed(1)}K
-              </Text>
-              <Text fontSize="sm" color="gray.500" data-test={testIds.total_objects_text}>Total Objects</Text>
-            </VStack>
-            {totalCost > 0 && (
-              <VStack spacing={1}>
-                <Text fontSize="2xl" fontWeight="bold" color="orange.500">
-                  ${totalCost.toFixed(2)}
+      {/* Enhanced Summary Stats */}
+      <Card 
+        bg={cardBg} 
+        shadow="0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+        borderRadius="2xl" 
+        border="1px solid"
+        borderColor={borderColor}
+        mb={8}
+      >
+        <CardBody p={10}>
+          <Flex 
+            direction={{ base: "column", md: "row" }} 
+            justify='space-between' 
+            align="center" 
+            gap={8}
+            flexWrap="wrap"
+          >
+            <VStack spacing={2} align="center" minW="120px">
+              <Box
+                p={3}
+                bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+                borderRadius="xl"
+                boxShadow="0 4px 12px rgba(102, 126, 234, 0.3)"
+              >
+                <Text fontSize="2xl" fontWeight="bold" color="white" textAlign="center">
+                  {buckets.length}
                 </Text>
-                <Text fontSize="sm" color="gray.500" data-test={testIds.total_cost_text}>Monthly Cost</Text>
+              </Box>
+              <Text fontSize="sm" color="gray.600" fontWeight="semibold" data-test={testIds.total_buckets_text} textAlign="center">
+                Total Buckets
+              </Text>
+            </VStack>
+            
+            <VStack spacing={2} align="center" minW="120px">
+              <Box
+                p={3}
+                bg="linear-gradient(135deg, #10b981 0%, #059669 100%)"
+                borderRadius="xl"
+                boxShadow="0 4px 12px rgba(16, 185, 129, 0.3)"
+              >
+                <Text fontSize="2xl" fontWeight="bold" color="white" textAlign="center">
+                  {totalStorageTB.toFixed(1)} GB
+                </Text>
+              </Box>
+              <Text fontSize="sm" color="gray.600" fontWeight="semibold" data-test={testIds.total_storage_text} textAlign="center">
+                Total Storage
+              </Text>
+            </VStack>
+            
+            <VStack spacing={2} align="center" minW="120px">
+              <Box
+                p={3}
+                bg="linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)"
+                borderRadius="xl"
+                boxShadow="0 4px 12px rgba(139, 92, 246, 0.3)"
+              >
+                <Text fontSize="2xl" fontWeight="bold" color="white" textAlign="center">
+                  {(totalObjects / 1000).toFixed(1)}K
+                </Text>
+              </Box>
+              <Text fontSize="sm" color="gray.600" fontWeight="semibold" data-test={testIds.total_objects_text} textAlign="center">
+                Total Objects
+              </Text>
+            </VStack>
+            
+            {totalCost > 0 && (
+              <VStack spacing={2} align="center" minW="120px">
+                <Box
+                  p={3}
+                  bg="linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"
+                  borderRadius="xl"
+                  boxShadow="0 4px 12px rgba(245, 158, 11, 0.3)"
+                >
+                  <Text fontSize="2xl" fontWeight="bold" color="white" textAlign="center">
+                    ${totalCost.toFixed(2)}
+                  </Text>
+                </Box>
+                <Text fontSize="sm" color="gray.600" fontWeight="semibold" data-test={testIds.total_cost_text} textAlign="center">
+                  Monthly Cost
+                </Text>
               </VStack>
             )}
-          </HStack>
-        </CardBody>
-      </Card>
-
-      {/* Filters and Search */}
-      <Card bg={cardBg} shadow="md" borderRadius="xl" mb={6}>
-        <CardBody>
-          <Flex gap={4} align="center" flexWrap={{ base: 'wrap', lg: 'nowrap' }}>
-            {/* Bulk Selection */}
-            <Checkbox
-              isChecked={allSelected}
-              isIndeterminate={someSelected}
-              onChange={(e) => handleSelectAll(e.target.checked)}
-              colorScheme="blue"
-            >
-              <Text fontSize="sm" fontWeight="medium">
-                {selectedBuckets.length > 0 ? `${selectedBuckets.length} selected` : 'Select All'}
-              </Text>
-            </Checkbox>
-
-            {/* Search */}
-            <Box flex="1" minW="250px">
-              <InputGroup>
-                <InputLeftElement pointerEvents="none">
-                  <SearchIcon color="gray.400" />
-                </InputLeftElement>
-                <Input
-                  placeholder="Search buckets by name..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  bg="gray.50"
-                  border="1px solid"
-                  borderColor="gray.200"
-                  _focus={{
-                    borderColor: '#667eea',
-                    boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)',
-                  }}
-                />
-              </InputGroup>
-            </Box>
-
-            {/* Region Filter */}
-            <Select
-              value={regionFilter}
-              onChange={(e) => setRegionFilter(e.target.value)}
-              minW="150px"
-              bg="gray.50"
-              _focus={{
-                borderColor: '#667eea',
-                boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)',
-              }}
-            >
-              <option value="all">All Regions</option>
-              {regions.map(region => (
-                <option key={region} value={region}>{region}</option>
-              ))}
-            </Select>
-
-            {/* Storage Class Filter */}
-            <Select
-              value={storageClassFilter}
-              onChange={(e) => setStorageClassFilter(e.target.value)}
-              minW="150px"
-              bg="gray.50"
-              _focus={{
-                borderColor: '#667eea',
-                boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)',
-              }}
-            >
-              <option value="all">All Classes</option>
-              {storageClasses.map(storageClass => (
-                <option key={storageClass} value={storageClass}>{storageClass}</option>
-              ))}
-            </Select>
-
-            {/* Sort Menu */}
-            <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline" minW="120px" fontSize={"12px"}>
-                Sort by {sortField}
-              </MenuButton>
-              <MenuList>  
-                <MenuItem onClick={() => handleSort('name')}>
-                  <HStack>
-                    <Text>Name</Text>
-                    {getSortIcon('name')}
-                  </HStack>
-                </MenuItem>
-                <MenuItem onClick={() => handleSort('size')}>
-                  <HStack>
-                    <Text>Size</Text>
-                    {getSortIcon('size')}
-                  </HStack>
-                </MenuItem>
-                <MenuItem onClick={() => handleSort('objects')}>
-                  <HStack>
-                    <Text>Objects</Text>
-                    {getSortIcon('objects')}
-                  </HStack>
-                </MenuItem>
-                <MenuItem onClick={() => handleSort('lastModified')}>
-                  <HStack>
-                    <Text>Last Modified</Text>
-                    {getSortIcon('lastModified')}
-                  </HStack>
-                </MenuItem>
-                {totalCost > 0 && (
-                  <MenuItem onClick={() => handleSort('cost')}>
-                    <HStack>
-                      <Text>Cost</Text>
-                      {getSortIcon('cost')}
-                    </HStack>
-                  </MenuItem>
-                )}
-              </MenuList>
-            </Menu>
-
-            {/* Results Count */}
-            <Text fontSize="sm" color="gray.500" whiteSpace="nowrap">
-              {filteredAndSortedBuckets.length} of {buckets.length} buckets
-            </Text>
           </Flex>
         </CardBody>
       </Card>
 
-      {/* Bucket Grid */}
+      {/* Enhanced Filters and Search */}
+      <Card 
+        bg={cardBg} 
+        shadow="0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+        borderRadius="2xl" 
+        border="1px solid"
+        borderColor={borderColor}
+        mb={8}
+      >
+        <CardBody py={6}>
+          <VStack spacing={6} align="stretch">
+            {/* Bulk Selection */}
+            <Flex gap={4} align="center" flexWrap={{ base: 'wrap', lg: 'nowrap' }}>
+              <Checkbox
+                isChecked={allSelected}
+                isIndeterminate={someSelected}
+                onChange={(e) => handleSelectAll(e.target.checked)}
+                colorScheme="blue"
+                size="lg"
+              >
+                <Text fontSize="sm" fontWeight="semibold">
+                  {selectedBuckets.length > 0 ? `${selectedBuckets.length} selected` : 'Select All'}
+                </Text>
+              </Checkbox>
+
+              {selectedBuckets.length > 0 && (
+                <Badge 
+                  colorScheme="blue" 
+                  borderRadius="full" 
+                  px={3} 
+                  py={1}
+                  fontSize="sm"
+                  fontWeight="semibold"
+                >
+                  {selectedBuckets.length} selected
+                </Badge>
+              )}
+            </Flex>
+
+            {/* Search and Filters */}
+            <Flex gap={4} align="center" flexWrap={{ base: 'wrap', lg: 'nowrap' }}>
+              {/* Search */}
+              <Box flex="1" minW="250px">
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none">
+                    <SearchIcon color="gray.400" />
+                  </InputLeftElement>
+                                     <Input
+                     placeholder="Search buckets by name..."
+                     value={searchQuery}
+                     onChange={(e) => setSearchQuery(e.target.value)}
+                     bg="gray.50"
+                     _dark={{ bg: 'gray.700', borderColor: 'gray.600' }}
+                     border="1px solid"
+                     borderColor="gray.200"
+                     borderRadius="xl"
+                    _focus={{
+                      borderColor: '#667eea',
+                      boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)',
+                    }}
+                    _hover={{
+                      borderColor: 'gray.300',
+                    }}
+                  />
+                </InputGroup>
+              </Box>
+
+                             {/* Region Filter */}
+               <Box minW="150px">
+                 <InputGroup>
+                  <Select
+                    value={regionFilter}
+                    onChange={(e) => setRegionFilter(e.target.value)}
+                    bg="gray.50"
+                    _dark={{ bg: 'gray.700', borderColor: 'gray.600' }}
+                    border="1px solid"
+                    borderColor="gray.200"
+                    borderRadius="xl"
+                    _focus={{
+                      borderColor: '#667eea',
+                      boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)',
+                    }}
+                    _hover={{
+                      borderColor: 'gray.300',
+                    }}
+                  >
+                    <option value="all">All Regions</option>
+                    {regions.map(region => (
+                      <option key={region} value={region}>{region}</option>
+                    ))}
+                  </Select>
+                </InputGroup>
+              </Box>
+
+              {/* Storage Class Filter */}
+              <Box minW="150px">
+                <InputGroup>
+                  <Select
+                    value={storageClassFilter}
+                    onChange={(e) => setStorageClassFilter(e.target.value)}
+                    bg="gray.50"
+                    _dark={{ bg: 'gray.700', borderColor: 'gray.600' }}
+                    border="1px solid"
+                    borderColor="gray.200"
+                    borderRadius="xl"
+                    _focus={{
+                      borderColor: '#667eea',
+                      boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)',
+                    }}
+                    _hover={{
+                      borderColor: 'gray.300',
+                    }}
+                  >
+                    <option value="all">All Classes</option>
+                    {storageClasses.map(storageClass => (
+                      <option key={storageClass} value={storageClass}>{storageClass}</option>
+                    ))}
+                  </Select>
+                </InputGroup>
+              </Box>
+
+              {/* Sort Menu */}
+              <Menu>
+                <MenuButton 
+                  as={Button} 
+                  rightIcon={<ChevronDownIcon />} 
+                  variant="outline" 
+                  minW="120px" 
+                  fontSize="sm"
+                  bg="gray.50"
+                  _dark={{ bg: 'gray.700', borderColor: 'gray.600' }}
+                  border="1px solid"
+                  borderColor="gray.200"
+                  borderRadius="xl"
+                  _focus={{
+                    borderColor: '#667eea',
+                    boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)',
+                  }}
+                  _hover={{
+                    borderColor: 'gray.300',
+                  }}
+                  leftIcon={<ViewIcon boxSize={4} />}
+                >
+                  Sort by {sortField}
+                </MenuButton>
+                <MenuList>  
+                  <MenuItem onClick={() => handleSort('name')}>
+                    <HStack>
+                      <Text>Name</Text>
+                      {getSortIcon('name')}
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem onClick={() => handleSort('size')}>
+                    <HStack>
+                      <Text>Size</Text>
+                      {getSortIcon('size')}
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem onClick={() => handleSort('objects')}>
+                    <HStack>
+                      <Text>Objects</Text>
+                      {getSortIcon('objects')}
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem onClick={() => handleSort('lastModified')}>
+                    <HStack>
+                      <Text>Last Modified</Text>
+                      {getSortIcon('lastModified')}
+                    </HStack>
+                  </MenuItem>
+                  {totalCost > 0 && (
+                    <MenuItem onClick={() => handleSort('cost')}>
+                      <HStack>
+                        <Text>Cost</Text>
+                        {getSortIcon('cost')}
+                      </HStack>
+                    </MenuItem>
+                  )}
+                </MenuList>
+              </Menu>
+
+              {/* Results Count */}
+              <Text fontSize="sm" color="gray.500" whiteSpace="nowrap" fontWeight="medium">
+                {filteredAndSortedBuckets.length} of {buckets.length} buckets
+              </Text>
+            </Flex>
+          </VStack>
+        </CardBody>
+      </Card>
+
+      {/* Enhanced Bucket Grid */}
       {loading ? (
-        <Card bg={cardBg} shadow="md" borderRadius="xl">
+        <Card 
+          bg={cardBg} 
+          shadow="0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+          borderRadius="2xl"
+          border="1px solid"
+          borderColor={borderColor}
+        >
           <CardBody py={16} textAlign="center">
-            <Text color="gray.500">Loading buckets...</Text>
+            <Box
+              p={4}
+              bg="gray.50"
+              _dark={{ bg: 'gray.700' }}
+              borderRadius="xl"
+              display="inline-block"
+              mb={4}
+            >
+              <ViewIcon boxSize={8} color="gray.400" />
+            </Box>
+            <Text color="gray.500" fontWeight="semibold">Loading buckets...</Text>
           </CardBody>
         </Card>
       ) : filteredAndSortedBuckets.length === 0 ? (
-        <Card bg={cardBg} shadow="md" borderRadius="xl">
+        <Card 
+          bg={cardBg} 
+          shadow="0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+          borderRadius="2xl"
+          border="1px solid"
+          borderColor={borderColor}
+        >
           <CardBody py={16} textAlign="center">
-            <ViewIcon boxSize={12} color="gray.400" mb={4} />
+            <Box
+              p={4}
+              bg="gray.50"
+              _dark={{ bg: 'gray.700' }}
+              borderRadius="xl"
+              display="inline-block"
+              mb={6}
+            >
+              <ViewIcon boxSize={12} color="gray.400" />
+            </Box>
             <Text fontSize="lg" fontWeight="semibold" color="gray.500" mb={2}>
               {searchQuery || regionFilter !== 'all' || storageClassFilter !== 'all' 
                 ? 'No buckets found' 
                 : 'No buckets yet'
               }
             </Text>
-            <Text color="gray.400" mb={6}>
+            <Text color="gray.400" mb={8} maxW="400px" mx="auto">
               {searchQuery || regionFilter !== 'all' || storageClassFilter !== 'all'
                 ? 'Try adjusting your search or filter criteria'
                 : 'Create your first bucket to get started with cloud storage'
@@ -324,10 +479,15 @@ export const BucketList: React.FC<BucketListProps> = ({
                 bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
                 color="white"
                 leftIcon={<AddIcon />}
+                size="lg"
+                px={8}
+                py={6}
+                borderRadius="xl"
                 _hover={{
                   transform: 'translateY(-2px)',
-                  boxShadow: 'xl',
+                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
                 }}
+                transition="all 0.3s ease"
               >
                 Create Your First Bucket
               </Button>
@@ -335,22 +495,24 @@ export const BucketList: React.FC<BucketListProps> = ({
           </CardBody>
         </Card>
       ) : (
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={8}>
           {filteredAndSortedBuckets.map((bucket) => (
             <Box key={bucket.id} position="relative">
               {/* Selection Checkbox */}
               <Checkbox
                 position="absolute"
-                top={3}
-                left={3}
+                top={4}
+                left={4}
                 zIndex={2}
                 isChecked={selectedBuckets.includes(bucket.id)}
                 onChange={(e) => handleSelectBucket(bucket.id, e.target.checked)}
                 colorScheme="blue"
                 bg="white"
+                _dark={{ bg: 'gray.800' }}
                 borderRadius="md"
                 p={1}
-                shadow="sm"
+                shadow="lg"
+                size="lg"
               />
               
               <BucketCard

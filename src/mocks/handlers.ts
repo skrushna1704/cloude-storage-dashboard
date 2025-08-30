@@ -36,7 +36,7 @@ const mockBuckets: Array<{
     size: 0,
     objectCount: 0,
     status: 'active',
-    createdAt: new Date().toISOString(),
+    createdAt: '2024-12-15T10:30:00Z',
   },
 ];
 
@@ -244,6 +244,7 @@ const mockBilling = {
 export const handlers = [
   // Buckets API
   http.get('/api/buckets', () => {
+    console.log('MSW: GET /api/buckets - returning buckets:', mockBuckets.map(b => ({ id: b.id, name: b.name })));
     return HttpResponse.json(mockBuckets);
   }),
 
@@ -258,7 +259,10 @@ export const handlers = [
       status: 'active',
       createdAt: new Date().toISOString(),
     };
+    console.log('MSW: Creating new bucket:', newBucket);
     mockBuckets.push(newBucket);
+    console.log('MSW: Updated mockBuckets array:', mockBuckets.map(b => ({ id: b.id, name: b.name })));
+    console.log('MSW: Total buckets in mock data:', mockBuckets.length);
     return HttpResponse.json(newBucket, { status: 201 });
   }),
 
@@ -267,20 +271,34 @@ export const handlers = [
     console.log('MSW: Attempting to delete bucket with ID:', id);
     console.log('MSW: Available bucket IDs:', mockBuckets.map(b => b.id));
     console.log('MSW: Available bucket names:', mockBuckets.map(b => b.name));
+    console.log('MSW: Full mockBuckets array:', JSON.stringify(mockBuckets, null, 2));
+    console.log('MSW: Total buckets in mock data:', mockBuckets.length);
     
-    const index = mockBuckets.findIndex(bucket => bucket.id === id);
+    // Try exact match first
+    let index = mockBuckets.findIndex(bucket => bucket.id === id);
+    
+    // If not found, try string comparison
+    if (index === -1) {
+      index = mockBuckets.findIndex(bucket => String(bucket.id) === String(id));
+    }
+    
     if (index !== -1) {
       const deletedBucket = mockBuckets.splice(index, 1)[0];
       console.log('MSW: Successfully deleted bucket:', deletedBucket.name);
+      console.log('MSW: Remaining buckets:', mockBuckets.map(b => ({ id: b.id, name: b.name })));
       return new HttpResponse(null, { status: 204 });
     }
     
     console.log('MSW: Bucket not found with ID:', id);
+    console.log('MSW: Requested ID type:', typeof id, 'Value:', id);
+    console.log('MSW: Available IDs types:', mockBuckets.map(b => ({ id: b.id, type: typeof b.id })));
+    
     return new HttpResponse(
       JSON.stringify({ 
         error: 'Bucket not found', 
         message: `Bucket with ID ${id} does not exist`,
-        availableIds: mockBuckets.map(b => b.id)
+        availableIds: mockBuckets.map(b => b.id),
+        requestedId: id
       }), 
       { 
         status: 404,

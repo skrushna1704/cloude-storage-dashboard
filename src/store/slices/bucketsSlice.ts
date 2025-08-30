@@ -41,11 +41,12 @@ const bucketsSlice = createSlice({
 
     // Create new bucket
     createBucket: (state, action: PayloadAction<Omit<Bucket, 'id' | 'created' | 'lastModified'>>) => {
+      const now = new Date();
       const newBucket: Bucket = {
         ...action.payload,
         id: Date.now().toString(),
-        created: new Date().toISOString().split('T')[0],
-        lastModified: 'Just now',
+        created: now.toISOString(),
+        lastModified: now.toISOString(),
         size: action.payload.size || 0,
         objects: action.payload.objects || 0,
         cost: action.payload.cost || 0,
